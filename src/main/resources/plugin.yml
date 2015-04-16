@@ -14,7 +14,7 @@ permissions:
     SimpleEgg.*:
         children:
             SimpleEgg.passive: true
-            SimpleEgg.village: true
+            SimpleEgg.villager: true
             SimpleEgg.tameable: true
             SimpleEgg.monster: true
     
@@ -46,8 +46,8 @@ permissions:
     SimpleEgg.squid:
         description: Allows capturing of this mob
     
-    #Village
-    SimpleEgg.village:
+    #Villager
+    SimpleEgg.villager:
         description: Allows capturing of this mob
     
     #Tameable
