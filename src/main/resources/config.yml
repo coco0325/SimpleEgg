@@ -1,0 +1,31 @@
+#YAML Editor Suggestions
+#Windows? This file might not display well in Notepad. I suggest Notepad++.
+#Linux? You probably know what you're doing. If not, I think gedit can display YAML
+#properly? If not, I just run Notepad++ in Wine.
+
+#Broken config? Save this file to your desktop, delete the config.yml found in your
+#server, and reload or restart your server. A new one will generate, and you can
+#retype your old settings back into the freshly generated file. Don't just copy and
+#paste everything, because that just re-adds your broken stuff.
+
+#If you need to look up the name of a Bukkit Material type, they are all in here:
+#<https://github.com/Bukkit/Bukkit/blob/master/src/main/java/org/bukkit/Material.java>
+#The list of Material types starts down the page a bit. Scroll past the lines that
+#start with "import" and you will see "public enum Material {", the Material types
+#are listed below that. You only need the plain English name; only worry about the
+#stuff on the left side of the parentheses.
+
+#This is the item consumed when a player catches a mob. Note that this MUST be a
+#valid Bukkit Material type. If it is not, SimpleEgg will say so in console at
+#startup and fall back to diamonds as a default.
+consumed-item: DIAMOND
+
+#This is a player-friendly spelling of the above Bukkit Material type. You should
+#type here whatever you want to show up in the help dialogues that tell players
+#what item to use. If the below quantity is more than 1, or you set it to 0, then
+#you should make this name plural.
+consumed-item-name: Diamonds
+
+#How many of the above item do you want to be used per capture? Setting this to
+#zero will simply not require any items in a player's inventory in order to capture.
+consumed-item-amount: 5
