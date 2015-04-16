@@ -8,6 +8,7 @@ commands:
     simpleegg:
         description: Help command for SimpleEgg
         usage: /simpleegg
+        aliases: se
         
 permissions:
     #Global
