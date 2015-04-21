@@ -25,8 +25,6 @@ package io.github.redpanda4552.SimpleEgg.command;
 
 import io.github.redpanda4552.SimpleEgg.SECommand;
 import io.github.redpanda4552.SimpleEgg.SimpleEggMain;
-import io.github.redpanda4552.SimpleEgg.util.EggTracker;
-import io.github.redpanda4552.SimpleEgg.util.EggTrackerEntry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -34,14 +32,11 @@ import org.bukkit.command.CommandSender;
 
 public class CSimpleEgg extends SECommand {
 
-	private EggTracker eggTracker;
-	
 	private final ChatColor a = ChatColor.AQUA;
 	private final ChatColor b = ChatColor.BLUE;
 	
-	public CSimpleEgg(SimpleEggMain plugin, EggTracker eggTracker) {
+	public CSimpleEgg(SimpleEggMain plugin) {
 		super(plugin);
-		this.eggTracker = eggTracker;
 	}
 	
 	private String[] help = {
@@ -91,14 +86,6 @@ public class CSimpleEgg extends SECommand {
 			else if (args[0].equalsIgnoreCase("Horses"))
 			{
 				sender.sendMessage(helpHorses);
-			}
-			else if (args[0].equalsIgnoreCase("debug"))
-			{
-				sender.sendMessage("Printing out all the tracker entries");
-				for (EggTrackerEntry entry: eggTracker.getEntries())
-				{
-					sender.sendMessage(entry.toString());
-				}
 			}
 		}
 		return true;

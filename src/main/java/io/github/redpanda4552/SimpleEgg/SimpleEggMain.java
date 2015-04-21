@@ -51,14 +51,32 @@ public class SimpleEggMain extends JavaPlugin
 		log = getLogger();
 		saveDefaultConfig();
 		
-		consumedMaterial = Material.valueOf(getConfig().getString("consumed-item"));
+		try
+		{
+			consumedMaterial = Material.valueOf(getConfig().getString("consumed-item"));
+		}
+		catch (IllegalArgumentException e)
+		{
+			log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
+			consumedMaterial = Material.DIAMOND;
+		}
+		
+		try
+		{
+			Integer.parseInt(getConfig().getString("consumed-item-amount"));
+			consumedMaterialAmount = getConfig().getInt("consumed-item-amount");
+		}
+		catch (NumberFormatException e)
+		{
+			log.warning("Config entry 'consumed-item-amount' is not an integer! Defaulting to 5.");
+		}
+		
 		consumedMaterialName = getConfig().getString("consumed-item-name");
-		consumedMaterialAmount = getConfig().getInt("consumed-item-amount");
 		
 		captureManager = new CaptureManager(this);
 		eggTracker = new EggTracker();
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
-		getCommand("simpleegg").setExecutor(new CSimpleEgg(this, eggTracker));
+		getCommand("simpleegg").setExecutor(new CSimpleEgg(this));
 	}
 	
 	public void onDisable() //As of now, nothing to do at disable, really.

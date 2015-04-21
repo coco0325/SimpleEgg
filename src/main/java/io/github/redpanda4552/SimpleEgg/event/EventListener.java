@@ -133,8 +133,6 @@ public class EventListener implements Listener
 			return;
 		}
 		
-		plugin.log.info("[Debug] Permission string reads: " + "SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase());
-		
 		if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase()))
 		{
 			if (!captureManager.ownerConfliction(entry))

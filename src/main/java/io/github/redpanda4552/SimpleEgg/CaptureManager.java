@@ -106,13 +106,13 @@ public class CaptureManager {
 		
 		for (int i = 5; i != 0; i--)
 		{
-			if (inventory.getItem(inventory.first(Material.DIAMOND)).getAmount() > 1)
+			if (inventory.getItem(inventory.first(plugin.consumedMaterial)).getAmount() > 1)
 			{
-				inventory.getItem(inventory.first(Material.DIAMOND)).setAmount(inventory.getItem(inventory.first(Material.DIAMOND)).getAmount() - 1);
+				inventory.getItem(inventory.first(plugin.consumedMaterial)).setAmount(inventory.getItem(inventory.first(plugin.consumedMaterial)).getAmount() - 1);
 			}
 			else
 			{
-				inventory.remove(inventory.getItem(inventory.first(Material.DIAMOND)));
+				inventory.remove(inventory.getItem(inventory.first(plugin.consumedMaterial)));
 			}
 		}
 
