@@ -104,7 +104,7 @@ public class CaptureManager {
 		LivingEntity entity = entry.getEntity(); //No cast check; for it to have gotten this far, it must be an animal.
 		Inventory inventory = player.getInventory();
 		
-		for (int i = 5; i != 0; i--)
+		for (int i = plugin.consumedMaterialAmount; i != 0; i--)
 		{
 			if (inventory.getItem(inventory.first(plugin.consumedMaterial)).getAmount() > 1)
 			{
