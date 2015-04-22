@@ -29,9 +29,7 @@ import io.github.redpanda4552.SimpleEgg.util.EggTracker;
 
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SimpleEggMain extends JavaPlugin
@@ -69,6 +67,7 @@ public class SimpleEggMain extends JavaPlugin
 		catch (NumberFormatException e)
 		{
 			log.warning("Config entry 'consumed-item-amount' is not an integer! Defaulting to 5.");
+			consumedMaterialAmount = 5;
 		}
 		
 		consumedMaterialName = getConfig().getString("consumed-item-name");
@@ -77,20 +76,5 @@ public class SimpleEggMain extends JavaPlugin
 		eggTracker = new EggTracker();
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("simpleegg").setExecutor(new CSimpleEgg(this));
-	}
-	
-	public void onDisable() //As of now, nothing to do at disable, really.
-	{
-		
-	}
-	
-	/**
-	 * Send a message to a player with color and tag.
-	 * @param player - The player to send a message to.
-	 * @param message - The message to send.
-	 */
-	public void send(Player player, String message)
-	{
-		player.sendMessage(ChatColor.RED + "[SimpleEgg] " + ChatColor.LIGHT_PURPLE + message);
 	}
 }
