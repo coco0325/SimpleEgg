@@ -357,7 +357,7 @@ public class EventListener implements Listener
 			{
 				if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: "))
 				{
-					event.getPlayer().sendMessage(ChatColor.RED + "[SimpleEgg] " + ChatColor.LIGHT_PURPLE + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+					event.getPlayer().sendMessage(pf + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
 					event.setCancelled(true);
 				}
 			}
