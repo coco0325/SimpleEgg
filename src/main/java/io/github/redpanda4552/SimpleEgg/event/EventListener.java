@@ -143,19 +143,19 @@ public class EventListener implements Listener
 				}
 				else
 				{
-					entry.getPlayer().sendMessage(pf + "You need " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + b + " to capture a mob, your egg will be refunded.");
+					entry.getPlayer().sendMessage(pf + "You need " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + b + " to capture a mob.");
 					refundEgg(entry.getPlayer());
 				}
 			}
 			else
 			{
-				entry.getPlayer().sendMessage(pf + "You do not own this mob, your egg will be refunded.");
+				entry.getPlayer().sendMessage(pf + "You do not own this mob.");
 				refundEgg(entry.getPlayer());
 			}
 		}
 		else
 		{
-			entry.getPlayer().sendMessage(pf + "You do not have permission to capture this mob, your egg will be refunded.");
+			entry.getPlayer().sendMessage(pf + "You do not have permission to capture this mob type.");
 			refundEgg(entry.getPlayer());
 		}
 	}
@@ -366,6 +366,8 @@ public class EventListener implements Listener
 	
 	private void refundEgg(Player player)
 	{
-		player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
+		if (plugin.getConfig().getBoolean("egg-refund")) {
+			player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
+		}
 	}
 }

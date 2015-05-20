@@ -29,3 +29,11 @@ consumed-item-name: Diamonds
 #How many of the above item do you want to be used per capture? Setting this to
 #zero will simply not require any items in a player's inventory in order to capture.
 consumed-item-amount: 5
+
+#If a capture fails because the player does not have permission to capture the mob type,
+#does not own the mob, or does not have enough of the required materials for capture,
+#should they get their egg back? Keep in mind, SimpleEgg automatically blocks chickens
+#from spawning from eggs that collide with mobs, and it is impossible to use these
+#scenarios to make infinite chickens with the refunded eggs.
+egg-refund: true
+
