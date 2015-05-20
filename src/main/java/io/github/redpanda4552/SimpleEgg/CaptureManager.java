@@ -69,6 +69,14 @@ public class CaptureManager {
 		{
 			Tameable tameable = (Tameable) entry.getEntity();
 			
+			//Order in the below statements is important. Owner override must be first, otherwise it will never be hit.
+			if (entry.getPlayer().hasPermission("SimpleEgg.owner-override")) {
+				if (entry.getPlayer().hasPermission("SimpleEgg.steal")) {
+					tameable.setOwner(entry.getPlayer());
+				}
+				return false;
+			}
+			
 			if (tameable.getOwner() != null && tameable.getOwner() != entry.getPlayer())
 			{
 				return true;

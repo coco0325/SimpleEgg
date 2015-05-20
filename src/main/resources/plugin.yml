@@ -5,110 +5,119 @@ author: bdubz4552
 description: A plugin to allow the capture and conversion of living entites to spawn eggs.
 
 commands:
-    simpleegg:
-        description: Help command for SimpleEgg
-        usage: /simpleegg
-        aliases: se
-        
+     simpleegg:
+          description: Help command for SimpleEgg
+          usage: /simpleegg
+          aliases: se
+          
 permissions:
-    #Global
-    SimpleEgg.*:
+     #Global
+     SimpleEgg.*:
+          children:
+                SimpleEgg.passive: true
+                SimpleEgg.villager: true
+                SimpleEgg.tameable: true
+                SimpleEgg.monster: true
+                SimpleEgg.steal: true
+     
+     #Passive
+     SimpleEgg.passive:
+          children:
+                SimpleEgg.cow: true
+                SimpleEgg.pig: true
+                SimpleEgg.chicken: true
+                SimpleEgg.sheep: true
+                SimpleEgg.mushroomcow: true
+                SimpleEgg.rabbit: true
+                SimpleEgg.bat: true
+                SimpleEgg.squid: true
+     SimpleEgg.cow:
+          description: Allows capturing of this mob
+     SimpleEgg.pig:
+          description: Allows capturing of this mob
+     SimpleEgg.chicken:
+          description: Allows capturing of this mob
+     SimpleEgg.sheep:
+          description: Allows capturing of this mob
+     SimpleEgg.mushroomcow:
+          description: Allows capturing of this mob
+     SimpleEgg.rabbit:
+          description: Allows capturing of this mob
+     SimpleEgg.bat:
+          description: Allows capturing of this mob
+     SimpleEgg.squid:
+          description: Allows capturing of this mob
+     
+     #Villager
+     SimpleEgg.villager:
+          description: Allows capturing of this mob
+     
+     #Tameable
+     SimpleEgg.tameable:
+          children:
+                SimpleEgg.horse: true
+                SimpleEgg.wolf: true
+                SimpleEgg.ocelot: true
+     SimpleEgg.horse:
+          description: Allows capturing of this mob
+     SimpleEgg.wolf:
+          description: Allows capturing of this mob
+     SimpleEgg.ocelot:
+          description: Allows capturing of this mob
+     
+     #Monsters
+     SimpleEgg.monster:
+          children:
+                SimpleEgg.magmacube: true
+                SimpleEgg.blaze: true
+                SimpleEgg.ghast: true
+                SimpleEgg.pigzombie: true
+                SimpleEgg.spider: true
+                SimpleEgg.cavespider: true
+                SimpleEgg.zombie: true
+                SimpleEgg.skeleton: true
+                SimpleEgg.creeper: true
+                SimpleEgg.witch: true
+                SimpleEgg.enderman: true
+                SimpleEgg.endermite: true
+                SimpleEgg.guardian: true
+                SimpleEgg.silverfish: true
+                SimpleEgg.slime: true
+     SimpleEgg.magmacube:
+          description: Allows capturing of this mob
+     SimpleEgg.blaze:
+          description: Allows capturing of this mob
+     SimpleEgg.ghast:
+          description: Allows capturing of this mob
+     SimpleEgg.pigzombie:
+          description: Allows capturing of this mob
+     SimpleEgg.spider:
+          description: Allows capturing of this mob
+     SimpleEgg.cavespider:
+          description: Allows capturing of this mob
+     SimpleEgg.zombie:
+          description: Allows capturing of this mob
+     SimpleEgg.skeleton:
+          description: Allows capturing of this mob
+     SimpleEgg.creeper:
+          description: Allows capturing of this mob
+     SimpleEgg.witch:
+          description: Allows capturing of this mob
+     SimpleEgg.enderman:
+          description: Allows capturing of this mob
+     SimpleEgg.endermite:
+          description: Allows capturing of this mob
+     SimpleEgg.guardian:
+          description: Allows capturing of this mob
+     SimpleEgg.silverfish:
+          description: Allows capturing of this mob
+     SimpleEgg.slime:
+          description: Allows capturing of this mob
+
+    #Ownership Modifications
+    SimpleEgg.owner-override:
+        description: Allows a player to capture a tameable mob even if someone else owns it.
+    SimpleEgg.steal:
+        description: Allows a player to capture and take ownership of a mob someone else owns.
         children:
-            SimpleEgg.passive: true
-            SimpleEgg.villager: true
-            SimpleEgg.tameable: true
-            SimpleEgg.monster: true
-    
-    #Passive
-    SimpleEgg.passive:
-        children:
-            SimpleEgg.cow: true
-            SimpleEgg.pig: true
-            SimpleEgg.chicken: true
-            SimpleEgg.sheep: true
-            SimpleEgg.mushroomcow: true
-            SimpleEgg.rabbit: true
-            SimpleEgg.bat: true
-            SimpleEgg.squid: true
-    SimpleEgg.cow:
-        description: Allows capturing of this mob
-    SimpleEgg.pig:
-        description: Allows capturing of this mob
-    SimpleEgg.chicken:
-        description: Allows capturing of this mob
-    SimpleEgg.sheep:
-        description: Allows capturing of this mob
-    SimpleEgg.mushroomcow:
-        description: Allows capturing of this mob
-    SimpleEgg.rabbit:
-        description: Allows capturing of this mob
-    SimpleEgg.bat:
-        description: Allows capturing of this mob
-    SimpleEgg.squid:
-        description: Allows capturing of this mob
-    
-    #Villager
-    SimpleEgg.villager:
-        description: Allows capturing of this mob
-    
-    #Tameable
-    SimpleEgg.tameable:
-        children:
-            SimpleEgg.horse: true
-            SimpleEgg.wolf: true
-            SimpleEgg.ocelot: true
-    SimpleEgg.horse:
-        description: Allows capturing of this mob
-    SimpleEgg.wolf:
-        description: Allows capturing of this mob
-    SimpleEgg.ocelot:
-        description: Allows capturing of this mob
-    
-    #Monsters
-    SimpleEgg.monster:
-        children:
-            SimpleEgg.magmacube: true
-            SimpleEgg.blaze: true
-            SimpleEgg.ghast: true
-            SimpleEgg.pigzombie: true
-            SimpleEgg.spider: true
-            SimpleEgg.cavespider: true
-            SimpleEgg.zombie: true
-            SimpleEgg.skeleton: true
-            SimpleEgg.creeper: true
-            SimpleEgg.witch: true
-            SimpleEgg.enderman: true
-            SimpleEgg.endermite: true
-            SimpleEgg.guardian: true
-            SimpleEgg.silverfish: true
-            SimpleEgg.slime: true
-    SimpleEgg.magmacube:
-        description: Allows capturing of this mob
-    SimpleEgg.blaze:
-        description: Allows capturing of this mob
-    SimpleEgg.ghast:
-        description: Allows capturing of this mob
-    SimpleEgg.pigzombie:
-        description: Allows capturing of this mob
-    SimpleEgg.spider:
-        description: Allows capturing of this mob
-    SimpleEgg.cavespider:
-        description: Allows capturing of this mob
-    SimpleEgg.zombie:
-        description: Allows capturing of this mob
-    SimpleEgg.skeleton:
-        description: Allows capturing of this mob
-    SimpleEgg.creeper:
-        description: Allows capturing of this mob
-    SimpleEgg.witch:
-        description: Allows capturing of this mob
-    SimpleEgg.enderman:
-        description: Allows capturing of this mob
-    SimpleEgg.endermite:
-        description: Allows capturing of this mob
-    SimpleEgg.guardian:
-        description: Allows capturing of this mob
-    SimpleEgg.silverfish:
-        description: Allows capturing of this mob
-    SimpleEgg.slime:
-        description: Allows capturing of this mob
+            SimpleEgg.owner-override: true
