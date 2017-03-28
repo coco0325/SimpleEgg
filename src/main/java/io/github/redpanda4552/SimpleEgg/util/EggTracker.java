@@ -71,7 +71,8 @@ public class EggTracker {
 	 * @return True if removed, false if entry is null or not in the list.
 	 */
 	public boolean removeEntry(EggTrackerEntry entry) {
-		if (entry != null && this.entries.contains(entry)) { //Null check is probably extraneous but it doesn't hurt anything
+	    // Null check is probably extraneous but it doesn't hurt anything
+		if (entry != null && this.entries.contains(entry)) {
 			this.entries.remove(entry);
 			return true;
 		}

@@ -24,10 +24,11 @@
 package io.github.redpanda4552.SimpleEgg.event;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import io.github.redpanda4552.SimpleEgg.CaptureManager;
-import io.github.redpanda4552.SimpleEgg.SimpleEggMain;
+import io.github.redpanda4552.SimpleEgg.Main;
 import io.github.redpanda4552.SimpleEgg.util.*;
 
 import org.bukkit.ChatColor;
@@ -35,26 +36,30 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Egg;
-import org.bukkit.entity.Guardian;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.Evoker.Spell;
 import org.bukkit.entity.Horse;
-import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Llama;
+import org.bukkit.entity.Llama.Color;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
-import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -64,21 +69,19 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.SpawnEgg;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 
-public class EventListener implements Listener
-{
-	private SimpleEggMain plugin;
+public class EventListener implements Listener {
+	private Main plugin;
 	
 	private EggTracker eggTracker;
 	private CaptureManager captureManager;
 	
-	private ChatColor a = ChatColor.AQUA;
-	private ChatColor b = ChatColor.BLUE;
-	private String pf = a + "[SimpleEgg]" + b + " ";
+	private final ChatColor a = ChatColor.AQUA;
+	private final ChatColor b = ChatColor.BLUE;
+	private final String tag = a + "[SimpleEgg]" + b + " ";
 	
-	public EventListener(SimpleEggMain plugin)
-	{
+	public EventListener(Main plugin) {
 		this.plugin = plugin;
 		eggTracker = plugin.eggTracker;
 		captureManager = plugin.captureManager;
@@ -89,25 +92,18 @@ public class EventListener implements Listener
 	 * Don't ask questions, just accept that it works.
 	 */
 	@EventHandler
-	public void onEggCollide(EntityDamageByEntityEvent event)
-	{
+	public void onEggCollide(EntityDamageByEntityEvent event) {
 		LivingEntity entity; Egg egg;
 		
-		if (event.getDamager() instanceof Egg)
-		{
+		if (event.getDamager() instanceof Egg) {
 			egg = (Egg) event.getDamager();
-		}
-		else
-		{
+		} else {
 			return;
 		}
 		
-		if (event.getEntity() instanceof LivingEntity)
-		{
+		if (event.getEntity() instanceof LivingEntity) {
 			entity = (LivingEntity) event.getEntity();
-		}
-		else
-		{
+		} else {
 			return;
 		}
 		
@@ -118,254 +114,178 @@ public class EventListener implements Listener
 	 * This fires after the damage event does, so this, somehow, works.
 	 */
 	@EventHandler
-	public void eggCollide(PlayerEggThrowEvent event)
-	{
-		EggTrackerEntry entry;
-		
-		if (eggTracker.getEntry(event.getEgg()) != null)
-		{
-			eggTracker.getEntry(event.getEgg()).setPlayer(event.getPlayer());
-			entry = eggTracker.getEntry(event.getEgg());
+	public void eggCollide(PlayerEggThrowEvent event) {
+		if (eggTracker.getEntry(event.getEgg()) != null) {
+		    eggTracker.getEntry(event.getEgg()).setPlayer(event.getPlayer());
 			event.setHatching(false);
-		}
-		else
-		{
+		} else {
 			return;
 		}
 		
-		if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase()))
-		{
-			if (!captureManager.ownerConfliction(entry))
-			{
-				if (captureManager.hasCaptureMaterials(entry))
-				{
+		// The player is undefined before we set it above. So to make sure the
+		// local var is in fact a true copy, we will define it post assignment.
+		EggTrackerEntry entry = eggTracker.getEntry(event.getEgg());
+		
+		if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase())) {
+			if (!captureManager.ownerConfliction(entry)) {
+				if (captureManager.hasCaptureMaterials(entry)) {
 					captureManager.makeSpawnEgg(entry);
-				}
-				else
-				{
-					entry.getPlayer().sendMessage(pf + "You need " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + b + " to capture a mob.");
+				} else {
+					entry.getPlayer().sendMessage(tag + "You need " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + b + " to capture a mob.");
 					refundEgg(entry.getPlayer());
 				}
-			}
-			else
-			{
-				entry.getPlayer().sendMessage(pf + "You do not own this mob.");
+			} else {
+				entry.getPlayer().sendMessage(tag + "You do not own this mob.");
 				refundEgg(entry.getPlayer());
 			}
-		}
-		else
-		{
-			entry.getPlayer().sendMessage(pf + "You do not have permission to capture this mob type.");
+		} else {
+			entry.getPlayer().sendMessage(tag + "You do not have permission to capture this mob type.");
 			refundEgg(entry.getPlayer());
 		}
+		
+		eggTracker.removeEntry(entry);
 	}
 	
 	@EventHandler
-	public void eggUse(PlayerInteractEvent event)
-	{
-		if (event.getItem() != null && event.getItem().getData() instanceof SpawnEgg && event.getAction() == Action.RIGHT_CLICK_BLOCK)
-		{
+	public void eggUse(PlayerInteractEvent event) {
+		if (event.getItem() != null && event.getItem().getItemMeta() instanceof SpawnEggMeta && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			ItemStack stack = event.getItem();
-			SpawnEgg spawnEgg = (SpawnEgg) event.getItem().getData();
-			ItemMeta meta = stack.getItemMeta();
+			SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
 			ArrayList<String> lore = (ArrayList<String>) meta.getLore();
 
-			//Check the first line for health, to see if we have a SimpleEgg.
-			if (meta.hasLore() && lore.get(0).startsWith("Health: "))
-			{
+			// Check the first line for health, to see if we have a SimpleEgg.
+			if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
 				event.setCancelled(true);
-				LivingEntity entity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), spawnEgg.getSpawnedType());
+				LivingEntity entity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
 				
-				if (stack.getAmount() > 1)
-				{
+				if (stack.getAmount() > 1) {
 					stack.setAmount(stack.getAmount() - 1);
-				}
-				else
-				{
+				} else {
 					event.getPlayer().getInventory().remove(stack);
 				}
 				
-				if (meta.getDisplayName().equalsIgnoreCase(entity.getType().toString()))
-				{
-					entity.setCustomName(null);
-				}
-				else
-				{
-					entity.setCustomName(meta.getDisplayName());
+				// If the ItemStack name contains ": ", that means the mob has a custom name.
+				// Below we will use ": " as a delimeter to split and remove the preceding mob type,
+				// as well as the ": ", isolating the actual name.
+				if (meta.getDisplayName().contains(": ")) {
+				    String customName = meta.getDisplayName();
+				    customName = customName.replaceFirst(meta.getDisplayName().split(": ")[0], "");
+				    customName = customName.replaceFirst(": ", "");
+				    entity.setCustomName(customName);
 				}
 				
-				entity.setMaxHealth(Double.parseDouble(lore.get(0).split(" ")[1].split("/")[1]));
+				HashMap<String, String> attributeMap = new HashMap<String, String>();
+				
+				for (String str : lore) {
+				    String[] strArr = str.split(": ");
+				    attributeMap.put(strArr[0], strArr[1]);
+				}
+				
+				entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Double.parseDouble(lore.get(0).split(" ")[1].split("/")[1]));
 				entity.setHealth(Double.parseDouble(lore.get(0).split(" ")[1].split("/")[0]));
 				
-				/*
-				 * In "Yes or No" cases, we will check if true and otherwise set to false.
-				 * While it is expected that a spawned in Guardian will never be an elder,
-				 * or a spawned in Creeper will never be charged, this is Vanilla, and may
-				 * be changed by another plugin. So for safety, we will make sure normal
-				 * mobs spawn in as such.
-				 */
-				
-				//Passive mobs with extra data
-				if (entity instanceof Ageable)
-				{
-					((Ageable) entity).setAge(Integer.parseInt(lore.get(1).split(" ")[2])); //Array index is 2 because the text has two spaces.
+				if (entity instanceof Ageable) {
+					((Ageable) entity).setAge(Integer.parseInt(attributeMap.get("Age (Ticks)")));
 					
-					if (entity instanceof Sheep)
-					{
-						((Sheep) entity).setColor(DyeColor.valueOf(lore.get(2).split(" ")[1]));
-					}
-					else if (entity instanceof Rabbit)
-					{
-						((Rabbit) entity).setRabbitType(Rabbit.Type.valueOf(lore.get(2).split(" ")[1]));
-					}
-					else if (entity instanceof Villager)
-					{
-						((Villager) entity).setProfession(Profession.valueOf(lore.get(2).split(" ")[1]));
-					}
-					else if (entity instanceof Tameable)
-					{
-						if (!lore.get(2).split(" ")[1].equalsIgnoreCase("None"))
-						{
-							((Tameable) entity).setOwner(Bukkit.getPlayer(UUID.fromString(lore.get(2).split(" ")[1])));
+					if (entity instanceof Sheep) {
+						((Sheep) entity).setColor(DyeColor.valueOf(attributeMap.get("Color")));
+					} else if (entity instanceof Rabbit) {
+						((Rabbit) entity).setRabbitType(Rabbit.Type.valueOf(attributeMap.get("Type")));
+					} else if (entity instanceof Villager) {
+						((Villager) entity).setProfession(Profession.valueOf(attributeMap.get("Profession")));
+					} else if (entity instanceof Tameable) {
+						if (!attributeMap.get("Owner").equals("None")) {
+							((Tameable) entity).setOwner(Bukkit.getPlayer(UUID.fromString(attributeMap.get("Owner"))));
+							((Tameable) entity).setTamed(true);
 						}
 						
-						if (entity instanceof Horse)
-						{
-							if (lore.get(3).split(" ")[1].equalsIgnoreCase("Iron"))
-							{
-								((Horse) entity).getInventory().setArmor(new ItemStack(Material.IRON_BARDING, 1));
-							}
-							else if (lore.get(3).split(" ")[1].equalsIgnoreCase("Gold"))
-							{
-								((Horse) entity).getInventory().setArmor(new ItemStack(Material.GOLD_BARDING, 1));
-							}
-							else if (lore.get(3).split(" ")[1].equalsIgnoreCase("Diamond"))
-							{
-								((Horse) entity).getInventory().setArmor(new ItemStack(Material.DIAMOND_BARDING, 1));
-							}
-							
-							if (lore.get(4).split(" ")[1].equalsIgnoreCase("Yes"))
-							{
-								((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-							}
-							else
-							{
-								((Horse) entity).getInventory().setSaddle(null);
-							}
-							
-							((Horse) entity).setVariant(Horse.Variant.valueOf(lore.get(5).split(" ")[1]));
-							
-							if (((Horse) entity).getVariant() == Variant.HORSE)
-							{
-								((Horse) entity).setColor(Horse.Color.valueOf(lore.get(6).split(" ")[1]));
-								((Horse) entity).setStyle(Horse.Style.valueOf(lore.get(7).split(" ")[1]));
-							}
-						}
-						else if (entity instanceof Wolf)
-						{
-							if (lore.get(3).split(" ")[1].equalsIgnoreCase("Yes"))
-							{
+						if (entity instanceof AbstractHorse) {
+						    ((AbstractHorse) entity).setJumpStrength(Double.parseDouble(attributeMap.get("Jump Power")));
+						    
+						    if (entity instanceof Horse) {
+						        if (attributeMap.get("Armor").equals("Iron")) {
+	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.IRON_BARDING, 1));
+	                            } else if (attributeMap.get("Armor").equals("Gold")) {
+	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.GOLD_BARDING, 1));
+	                            } else if (attributeMap.get("Armor").equals("Diamond")) {
+	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.DIAMOND_BARDING, 1));
+	                            }
+	                            
+	                            if (attributeMap.get("Saddle").equals("Yes")) {
+	                                ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+	                            }
+	                            
+	                            ((Horse) entity).setColor(Horse.Color.valueOf(attributeMap.get("Color")));
+                                ((Horse) entity).setStyle(Horse.Style.valueOf(attributeMap.get("Style")));
+						    } else if (entity instanceof ChestedHorse) {
+						        if (Boolean.parseBoolean(attributeMap.get("Carrying Chest"))) {
+						            ((ChestedHorse) entity).setCarryingChest(true);
+						        } else {
+						            ((ChestedHorse) entity).setCarryingChest(false);
+						        }
+						    } else if (entity instanceof Llama) {
+						        ((Llama) entity).setColor(Color.valueOf(attributeMap.get("Color")));
+						        ((Llama) entity).setStrength(Integer.parseInt(attributeMap.get("Strength")));
+						    }
+						} else if (entity instanceof Wolf) {
+							if (attributeMap.get("Angry").equals("Yes")) {
 								((Wolf) entity).setAngry(true);
-							}
-							else
-							{
+							} else {
 								((Wolf) entity).setAngry(false);
 							}
 							
-							if (((Wolf) entity).isTamed())
-							{
-								((Wolf) entity).setCollarColor(DyeColor.valueOf(lore.get(4).split(" ")[1]));
+							if (((Wolf) entity).isTamed()) {
+								((Wolf) entity).setCollarColor(DyeColor.valueOf(attributeMap.get("Collar")));
 							}
-						}
-						else if (entity instanceof Ocelot)
-						{
-							((Ocelot) entity).setCatType(Ocelot.Type.valueOf(lore.get(3).split(" ")[1]));
+						} else if (entity instanceof Ocelot) {
+							((Ocelot) entity).setCatType(Ocelot.Type.valueOf(attributeMap.get("Type")));
+							((Ocelot) entity).setSitting(Boolean.parseBoolean(attributeMap.get("Sitting")));
 						}
 					}
-				}
-				
-				//Hostiles with extra data
-				else if (entity instanceof Slime)
-				{
+				} else if (entity instanceof Slime) {
 					Slime slime = (Slime) entity;
-					slime.setSize(Integer.parseInt(lore.get(1).split(" ")[1]));
-				}
-				else if (entity instanceof Creeper)
-				{
-					if (lore.get(1).split(" ")[1].equalsIgnoreCase("Yes"))
-					{
+					slime.setSize(Integer.parseInt(attributeMap.get("Size")));
+				} else if (entity instanceof Creeper) {
+					if (attributeMap.get("Charged").equals("Yes")) {
 						((Creeper) entity).setPowered(true);
-					}
-					else
-					{
+					} else {
 						((Creeper) entity).setPowered(false);
 					}
-				}
-				else if (entity instanceof Guardian)
-				{
-					if (lore.get(1).split(" ")[1].equalsIgnoreCase("Yes"))
-					{
-						((Guardian) entity).setElder(true);
-					}
-					else
-					{
-						((Guardian) entity).setElder(false);
-					}
-				}
-				else if (entity instanceof Skeleton)
-				{
-					((Skeleton) entity).setSkeletonType(SkeletonType.valueOf(lore.get(1).split(" ")[1]));
-				}
-				else if (entity instanceof Zombie)
-				{
-					if (lore.get(1).split(" ")[1].equalsIgnoreCase("Yes"))
-					{
+				} else if (entity instanceof Zombie) {
+					if (attributeMap.get("Baby").equals("Yes")) {
 						((Zombie) entity).setBaby(true);
-					}
-					else
-					{
+					} else {
 						((Zombie) entity).setBaby(false);
 					}
 					
-					if (lore.get(2).split(" ")[1].equalsIgnoreCase("Yes"))
-					{
-						((Zombie) entity).setVillager(true);
+					if (entity instanceof PigZombie) {
+					    ((PigZombie) entity).setAnger(Integer.parseInt(attributeMap.get("Anger Level")));
+					} else if (entity instanceof ZombieVillager) {
+					    ((ZombieVillager) entity).setVillagerProfession(Profession.valueOf(attributeMap.get("Profession")));
 					}
-					else
-					{
-						((Zombie) entity).setVillager(false);
-					}
-					
-					if (entity instanceof PigZombie)
-					{
-						PigZombie pigzombie = (PigZombie) entity;
-						pigzombie.setAnger(Integer.parseInt(lore.get(3).split(" ")[2])); //Array index is 2 because the text has two spaces.
-					}
+				} else if (entity instanceof Evoker) {
+				    ((Evoker) entity).setCurrentSpell(Spell.valueOf(attributeMap.get("Active Spell")));
 				}
 			}
 		}
 	}
 	
 	@EventHandler
-	public void eggUseOnEntity(PlayerInteractEntityEvent event)
-	{
-		ItemStack stack = event.getPlayer().getItemInHand();
+	public void eggUseOnEntity(PlayerInteractEntityEvent event) {
+		ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
 		ItemMeta meta = stack.getItemMeta();
-		if (stack.getData() instanceof SpawnEgg)
-		{
-			if (meta != null && meta.getLore() != null)
-			{
-				if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: "))
-				{
-					event.getPlayer().sendMessage(pf + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+		
+		if (meta instanceof SpawnEggMeta) {
+			if (meta != null && meta.getLore() != null) {
+				if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: ")) {
+					event.getPlayer().sendMessage(tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
 					event.setCancelled(true);
 				}
 			}
 		}
 	}
 	
-	private void refundEgg(Player player)
-	{
+	private void refundEgg(Player player) {
 		if (plugin.getConfig().getBoolean("egg-refund")) {
 			player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
 		}

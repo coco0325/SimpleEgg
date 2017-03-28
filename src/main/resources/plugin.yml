@@ -1,6 +1,6 @@
-main: io.github.redpanda4552.SimpleEgg.SimpleEggMain
+main: io.github.redpanda4552.SimpleEgg.Main
 name: SimpleEgg
-version: 0.0.3
+version: 0.1.0
 author: bdubz4552
 description: A plugin to allow the capture and conversion of living entites to spawn eggs.
 
@@ -18,7 +18,9 @@ permissions:
             SimpleEgg.villager: true
             SimpleEgg.tameable: true
             SimpleEgg.monster: true
+            SimpleEgg.owner-override: true
             SimpleEgg.steal: true
+            SimpleEgg.auto-tame: true
     
     #Passive
     SimpleEgg.passive:
@@ -31,6 +33,9 @@ permissions:
             SimpleEgg.rabbit: true
             SimpleEgg.bat: true
             SimpleEgg.squid: true
+            SimpleEgg.polarbear: true
+            SimpleEgg.snowman: true
+            SimpleEgg.irongolem: true
     SimpleEgg.cow:
         description: Allows capturing of this mob
     SimpleEgg.pig:
@@ -47,6 +52,12 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.squid:
         description: Allows capturing of this mob
+    SimpleEgg.polarbear:
+        description: Allows capturing of this mob
+    SimpleEgg.snowman:
+        description: Allows capturing of this mob
+    SimpleEgg.irongolem:
+        description: Allows capturing of this mob
     
     #Villager
     SimpleEgg.villager:
@@ -56,9 +67,24 @@ permissions:
     SimpleEgg.tameable:
         children:
             SimpleEgg.horse: true
+            SimpleEgg.donkey: true
+            SimpleEgg.mule: true
+            SimpleEgg.zombiehorse: true
+            SimpleEgg.skeletonhorse: true
+            SimpleEgg.llama: true
             SimpleEgg.wolf: true
             SimpleEgg.ocelot: true
     SimpleEgg.horse:
+        description: Allows capturing of this mob
+    SimpleEgg.donkey:
+        description: Allows capturing of this mob
+    SimpleEgg.mule:
+        description: Allows capturing of this mob
+    SimpleEgg.zombiehorse:
+        description: Allows capturing of this mob
+    SimpleEgg.skeletonhorse:
+        description: Allows capturing of this mob
+    SimpleEgg.llama:
         description: Allows capturing of this mob
     SimpleEgg.wolf:
         description: Allows capturing of this mob
@@ -75,14 +101,24 @@ permissions:
             SimpleEgg.spider: true
             SimpleEgg.cavespider: true
             SimpleEgg.zombie: true
+            SimpleEgg.husk: true
+            SimpleEgg.zombievillager: true
             SimpleEgg.skeleton: true
+            SimpleEgg.witherskeleton: true
             SimpleEgg.creeper: true
             SimpleEgg.witch: true
             SimpleEgg.enderman: true
             SimpleEgg.endermite: true
             SimpleEgg.guardian: true
+            SimpleEgg.elderguardian: true
             SimpleEgg.silverfish: true
             SimpleEgg.slime: true
+            SimpleEgg.wither: true
+            SimpleEgg.shulker: true
+            SimpleEgg.evoker: true
+            SimpleEgg.vex: true
+            SimpleEgg.vindicator: true
+            
     SimpleEgg.magmacube:
         description: Allows capturing of this mob
     SimpleEgg.blaze:
@@ -97,7 +133,13 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.zombie:
         description: Allows capturing of this mob
+    SimpleEgg.husk:
+        description: Allows capturing of this mob
+    SimpleEgg.zombievillager:
+        description: Allows capturing of this mob
     SimpleEgg.skeleton:
+        description: Allows capturing of this mob
+    SimpleEgg.witherskeleton:
         description: Allows capturing of this mob
     SimpleEgg.creeper:
         description: Allows capturing of this mob
@@ -109,9 +151,21 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.guardian:
         description: Allows capturing of this mob
+    SimpleEgg.elderguardian:
+        description: Allows capturing of this mob
     SimpleEgg.silverfish:
         description: Allows capturing of this mob
     SimpleEgg.slime:
+        description: Allows capturing of this mob
+    SimpleEgg.wither:
+        description: Allows capturing of this mob
+    SimpleEgg.shulker:
+        description: Allows capturing of this mob
+    SimpleEgg.evoker:
+        description: Allows capturing of this mob
+    SimpleEgg.vex:
+        description: Allows capturing of this mob
+    SimpleEgg.vindicator:
         description: Allows capturing of this mob
         
     #Ownership Modifications
@@ -121,3 +175,5 @@ permissions:
         description: Allows a player to capture and take ownership of a mob someone else owns.
         children:
             SimpleEgg.owner-override: true
+    SimpleEgg.auto-tame:
+        description: Allows a player to automatically tame an untamed mob when they capture it.

@@ -23,7 +23,7 @@
  */
 package io.github.redpanda4552.SimpleEgg;
 
-import io.github.redpanda4552.SimpleEgg.command.CSimpleEgg;
+import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
 import io.github.redpanda4552.SimpleEgg.event.EventListener;
 import io.github.redpanda4552.SimpleEgg.util.EggTracker;
 
@@ -32,49 +32,38 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class SimpleEggMain extends JavaPlugin
-{
+public class Main extends JavaPlugin {
 
 	public Logger log;
-	
 	public CaptureManager captureManager;
 	public EggTracker eggTracker;
-	
 	public Material consumedMaterial;
 	public String consumedMaterialName;
 	public int consumedMaterialAmount;
 	
-	public void onEnable()
-	{
+	public void onEnable() {
 		log = getLogger();
 		saveDefaultConfig();
 		
-		try
-		{
+		try {
 			consumedMaterial = Material.valueOf(getConfig().getString("consumed-item"));
-		}
-		catch (IllegalArgumentException e)
-		{
+		} catch (IllegalArgumentException e) {
 			log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
 			consumedMaterial = Material.DIAMOND;
 		}
 		
-		try
-		{
+		try {
 			Integer.parseInt(getConfig().getString("consumed-item-amount"));
 			consumedMaterialAmount = getConfig().getInt("consumed-item-amount");
-		}
-		catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			log.warning("Config entry 'consumed-item-amount' is not an integer! Defaulting to 5.");
 			consumedMaterialAmount = 5;
 		}
 		
 		consumedMaterialName = getConfig().getString("consumed-item-name");
-		
 		captureManager = new CaptureManager(this);
 		eggTracker = new EggTracker();
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
-		getCommand("simpleegg").setExecutor(new CSimpleEgg(this));
+		getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this));
 	}
 }

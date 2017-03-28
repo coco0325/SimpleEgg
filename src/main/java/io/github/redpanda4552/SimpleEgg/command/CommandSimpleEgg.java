@@ -23,19 +23,18 @@
  */
 package io.github.redpanda4552.SimpleEgg.command;
 
-import io.github.redpanda4552.SimpleEgg.SECommand;
-import io.github.redpanda4552.SimpleEgg.SimpleEggMain;
+import io.github.redpanda4552.SimpleEgg.Main;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class CSimpleEgg extends SECommand {
+public class CommandSimpleEgg extends AbstractCommand {
 
 	private final ChatColor a = ChatColor.AQUA;
 	private final ChatColor b = ChatColor.BLUE;
 	
-	public CSimpleEgg(SimpleEggMain plugin) {
+	public CommandSimpleEgg(Main plugin) {
 		super(plugin);
 	}
 	
@@ -71,24 +70,17 @@ public class CSimpleEgg extends SECommand {
 	};
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-	{
-		if (args.length == 0)
-		{
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length == 0) {
 			sender.sendMessage(help);
-		}
-		else if (args.length >= 1)
-		{
-			if (args[0].equalsIgnoreCase("Capturing"))
-			{
+		} else if (args.length >= 1) {
+			if (args[0].equalsIgnoreCase("Capturing")) {
 				sender.sendMessage(helpCapture);
-			}
-			else if (args[0].equalsIgnoreCase("Horses"))
-			{
+			} else if (args[0].equalsIgnoreCase("Horses")) {
 				sender.sendMessage(helpHorses);
 			}
 		}
+		
 		return true;
 	}
-
 }
