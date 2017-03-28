@@ -26,11 +26,14 @@ package io.github.redpanda4552.SimpleEgg;
 import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
 import io.github.redpanda4552.SimpleEgg.event.EventListener;
 import io.github.redpanda4552.SimpleEgg.util.EggTracker;
+import net.gravitydevelopment.updater.SimpleEggUpdater;
+import net.gravitydevelopment.updater.SimpleEggUpdater.UpdateResult;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin {
 
@@ -40,6 +43,8 @@ public class Main extends JavaPlugin {
 	public Material consumedMaterial;
 	public String consumedMaterialName;
 	public int consumedMaterialAmount;
+	
+	private final Main main = this;
 	
 	public void onEnable() {
 		log = getLogger();
@@ -65,5 +70,27 @@ public class Main extends JavaPlugin {
 		eggTracker = new EggTracker();
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this));
+		runUpdateChecker();
 	}
+	
+	/**
+     * Update notifier; only notifies, does not download.
+     * Utilizes Gravity's Updater class.
+     */
+    private void runUpdateChecker() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (getConfig().getBoolean("update-checks") == true) {
+                    SimpleEggUpdater updater = new SimpleEggUpdater(main, 88959, main.getFile(), SimpleEggUpdater.UpdateType.NO_DOWNLOAD, false);
+                    
+                    if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+                        log.info("A new build of SimpleEgg is available!");
+                        log.info("You can find " + updater.getLatestName() + " at: https://dev.bukkit.org/projects/simpleegg");
+                    }
+                }    
+            }
+        }.runTaskAsynchronously(main);
+            
+    }
 }

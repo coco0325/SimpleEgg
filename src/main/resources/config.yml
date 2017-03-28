@@ -1,6 +1,11 @@
 # If you need to look up the name of a Bukkit Material type, they are all in
 # here: <https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html>
 
+# Whether or not SimpleEgg can automatically check for updates. If enabled, at
+# startup SimpleEgg will communicate with Curse to look for newer builds, and 
+# notify via console if a new build is found.
+update-checks: true
+
 # This is the item consumed when a player catches a mob. Note that this MUST be
 # a valid Bukkit Material type. If it is not, SimpleEgg will say so in console
 # at startup and fall back to diamonds as a default.
