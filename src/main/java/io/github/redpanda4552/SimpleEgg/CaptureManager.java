@@ -183,11 +183,16 @@ public class CaptureManager {
 	                    lore.add("Style: " + horse.getStyle().toString());
 				    } else if (entity instanceof ChestedHorse) {
 				        lore.add("Carrying Chest: " + ((ChestedHorse) entity).isCarryingChest());
-				        // TODO After base testing, look into saddle storage or ejection
-				    } else if (entity instanceof Llama) {
-				        lore.add("Color: " + ((Llama) entity).getColor().toString());
-				        lore.add("Strength: " + ((Llama) entity).getStrength());
-				        // TODO Look into carpet storage
+				        
+				        if (entity instanceof Llama) {
+				            Llama llama = (Llama) entity;
+	                        lore.add("Color: " + llama.getColor().toString());
+	                        lore.add("Strength: " + llama.getStrength());
+	                        
+	                        if (llama.getInventory().getDecor() != null) {
+	                            llama.getWorld().dropItemNaturally(llama.getLocation(), llama.getInventory().getDecor());
+	                        }
+	                    }
 				    }
 				} else if (entity instanceof Wolf) {
 					if (((Wolf) entity).isAngry()) {

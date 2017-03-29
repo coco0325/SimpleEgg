@@ -223,9 +223,11 @@ public class EventListener implements Listener {
 						        } else {
 						            ((ChestedHorse) entity).setCarryingChest(false);
 						        }
-						    } else if (entity instanceof Llama) {
-						        ((Llama) entity).setColor(Color.valueOf(attributeMap.get("Color")));
-						        ((Llama) entity).setStrength(Integer.parseInt(attributeMap.get("Strength")));
+						        
+						        if (entity instanceof Llama) {
+	                                ((Llama) entity).setColor(Color.valueOf(attributeMap.get("Color")));
+	                                ((Llama) entity).setStrength(Integer.parseInt(attributeMap.get("Strength")));
+	                            }
 						    }
 						} else if (entity instanceof Wolf) {
 							if (attributeMap.get("Angry").equals("Yes")) {
