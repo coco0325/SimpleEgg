@@ -1,6 +1,6 @@
 main: io.github.redpanda4552.SimpleEgg.Main
 name: SimpleEgg
-version: 0.1.0
+version: 0.1.1
 author: bdubz4552
 description: A plugin to allow the capture and conversion of living entites to spawn eggs.
 
