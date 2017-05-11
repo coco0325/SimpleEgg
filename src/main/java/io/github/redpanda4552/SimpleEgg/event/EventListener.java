@@ -24,42 +24,16 @@
 package io.github.redpanda4552.SimpleEgg.event;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
 import io.github.redpanda4552.SimpleEgg.CaptureManager;
 import io.github.redpanda4552.SimpleEgg.Main;
 import io.github.redpanda4552.SimpleEgg.util.*;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Egg;
-import org.bukkit.entity.Evoker;
-import org.bukkit.entity.Evoker.Spell;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.Llama.Color;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.Villager.Profession;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
-import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -156,7 +130,7 @@ public class EventListener implements Listener {
 			// Check the first line for health, to see if we have a SimpleEgg.
 			if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
 				event.setCancelled(true);
-				LivingEntity entity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+				LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
 				
 				if (stack.getAmount() > 1) {
 					stack.setAmount(stack.getAmount() - 1);
@@ -171,103 +145,10 @@ public class EventListener implements Listener {
 				    String customName = meta.getDisplayName();
 				    customName = customName.replaceFirst(meta.getDisplayName().split(": ")[0], "");
 				    customName = customName.replaceFirst(": ", "");
-				    entity.setCustomName(customName);
+				    livingEntity.setCustomName(customName);
 				}
 				
-				HashMap<String, String> attributeMap = new HashMap<String, String>();
-				
-				for (String str : lore) {
-				    String[] strArr = str.split(": ");
-				    attributeMap.put(strArr[0], strArr[1]);
-				}
-				
-				entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Double.parseDouble(lore.get(0).split(" ")[1].split("/")[1]));
-				entity.setHealth(Double.parseDouble(lore.get(0).split(" ")[1].split("/")[0]));
-				
-				if (entity instanceof Ageable) {
-					((Ageable) entity).setAge(Integer.parseInt(attributeMap.get("Age (Ticks)")));
-					
-					if (entity instanceof Sheep) {
-						((Sheep) entity).setColor(DyeColor.valueOf(attributeMap.get("Color")));
-					} else if (entity instanceof Rabbit) {
-						((Rabbit) entity).setRabbitType(Rabbit.Type.valueOf(attributeMap.get("Type")));
-					} else if (entity instanceof Villager) {
-						((Villager) entity).setProfession(Profession.valueOf(attributeMap.get("Profession")));
-					} else if (entity instanceof Tameable) {
-						if (!attributeMap.get("Owner").equals("None")) {
-							((Tameable) entity).setOwner(Bukkit.getPlayer(UUID.fromString(attributeMap.get("Owner"))));
-							((Tameable) entity).setTamed(true);
-						}
-						
-						if (entity instanceof AbstractHorse) {
-						    ((AbstractHorse) entity).setJumpStrength(Double.parseDouble(attributeMap.get("Jump Power")));
-						    
-						    if (entity instanceof Horse) {
-						        if (attributeMap.get("Armor").equals("Iron")) {
-	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.IRON_BARDING, 1));
-	                            } else if (attributeMap.get("Armor").equals("Gold")) {
-	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.GOLD_BARDING, 1));
-	                            } else if (attributeMap.get("Armor").equals("Diamond")) {
-	                                ((Horse) entity).getInventory().setArmor(new ItemStack(Material.DIAMOND_BARDING, 1));
-	                            }
-	                            
-	                            if (attributeMap.get("Saddle").equals("Yes")) {
-	                                ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-	                            }
-	                            
-	                            ((Horse) entity).setColor(Horse.Color.valueOf(attributeMap.get("Color")));
-                                ((Horse) entity).setStyle(Horse.Style.valueOf(attributeMap.get("Style")));
-						    } else if (entity instanceof ChestedHorse) {
-						        if (Boolean.parseBoolean(attributeMap.get("Carrying Chest"))) {
-						            ((ChestedHorse) entity).setCarryingChest(true);
-						        } else {
-						            ((ChestedHorse) entity).setCarryingChest(false);
-						        }
-						        
-						        if (entity instanceof Llama) {
-	                                ((Llama) entity).setColor(Color.valueOf(attributeMap.get("Color")));
-	                                ((Llama) entity).setStrength(Integer.parseInt(attributeMap.get("Strength")));
-	                            }
-						    }
-						} else if (entity instanceof Wolf) {
-							if (attributeMap.get("Angry").equals("Yes")) {
-								((Wolf) entity).setAngry(true);
-							} else {
-								((Wolf) entity).setAngry(false);
-							}
-							
-							if (((Wolf) entity).isTamed()) {
-								((Wolf) entity).setCollarColor(DyeColor.valueOf(attributeMap.get("Collar")));
-							}
-						} else if (entity instanceof Ocelot) {
-							((Ocelot) entity).setCatType(Ocelot.Type.valueOf(attributeMap.get("Type")));
-							((Ocelot) entity).setSitting(Boolean.parseBoolean(attributeMap.get("Sitting")));
-						}
-					}
-				} else if (entity instanceof Slime) {
-					Slime slime = (Slime) entity;
-					slime.setSize(Integer.parseInt(attributeMap.get("Size")));
-				} else if (entity instanceof Creeper) {
-					if (attributeMap.get("Charged").equals("Yes")) {
-						((Creeper) entity).setPowered(true);
-					} else {
-						((Creeper) entity).setPowered(false);
-					}
-				} else if (entity instanceof Zombie) {
-					if (attributeMap.get("Baby").equals("Yes")) {
-						((Zombie) entity).setBaby(true);
-					} else {
-						((Zombie) entity).setBaby(false);
-					}
-					
-					if (entity instanceof PigZombie) {
-					    ((PigZombie) entity).setAnger(Integer.parseInt(attributeMap.get("Anger Level")));
-					} else if (entity instanceof ZombieVillager) {
-					    ((ZombieVillager) entity).setVillagerProfession(Profession.valueOf(attributeMap.get("Profession")));
-					}
-				} else if (entity instanceof Evoker) {
-				    ((Evoker) entity).setCurrentSpell(Spell.valueOf(attributeMap.get("Active Spell")));
-				}
+				new LoreExtractor(lore, livingEntity);
 			}
 		}
 	}
