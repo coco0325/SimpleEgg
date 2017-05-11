@@ -9,9 +9,8 @@ public class MerchantRecipeConverter {
 
     /**
      * Returns a String representation of a MerchantRecipe. Spaces are used as
-     * delimeters between attributes, and for multivalue attributes such as the
-     * ingredients, commas separate the individual values. An example:<br><b>
-     * "result_material-# ingredient_one-#,ingredient_two-# uses max_uses experience"
+     * delimeters between attributes. Utilizes
+     * {@link ItemStackConverter ItemStackConverter} for the ItemStacks.
      * </b>
      * @param merchantRecipe - The MerchantRecipe to stringify.
      * @return A String that can be stored and passed in to
