@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.redpanda4552.SimpleEgg.event;
+package io.github.redpanda4552.SimpleEgg;
 
 import java.util.ArrayList;
-import io.github.redpanda4552.SimpleEgg.CaptureManager;
-import io.github.redpanda4552.SimpleEgg.Main;
+
 import io.github.redpanda4552.SimpleEgg.util.*;
 
 import org.bukkit.Location;

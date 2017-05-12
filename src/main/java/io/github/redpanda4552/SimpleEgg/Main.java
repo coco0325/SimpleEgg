@@ -24,8 +24,6 @@
 package io.github.redpanda4552.SimpleEgg;
 
 import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
-import io.github.redpanda4552.SimpleEgg.event.EventListener;
-import io.github.redpanda4552.SimpleEgg.util.EggTracker;
 import net.gravitydevelopment.updater.SimpleEggUpdater;
 import net.gravitydevelopment.updater.SimpleEggUpdater.UpdateResult;
 
