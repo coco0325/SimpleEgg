@@ -23,7 +23,6 @@
  */
 package io.github.redpanda4552.SimpleEgg;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -34,14 +33,11 @@ import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import io.github.redpanda4552.SimpleEgg.util.EggTrackerEntry;
 import io.github.redpanda4552.SimpleEgg.util.LorePacker;
+import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class CaptureManager {
 
 	private Main plugin;
-	
-	private final ChatColor a = ChatColor.AQUA;
-    private final ChatColor b = ChatColor.BLUE;
-    private final String tag = a + "[SimpleEgg]" + b + " ";
 	
 	public CaptureManager(Main plugin) {
 		this.plugin = plugin;
@@ -124,6 +120,6 @@ public class CaptureManager {
         stack.setItemMeta(meta);
         livingEntity.getWorld().dropItem(livingEntity.getLocation(), stack);
         livingEntity.remove();
-        player.sendMessage(tag + "Mob captured successfully!");
+        player.sendMessage(Text.tag + "Mob captured successfully!");
 	}
 }

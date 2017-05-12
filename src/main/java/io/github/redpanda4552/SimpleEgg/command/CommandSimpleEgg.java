@@ -24,16 +24,13 @@
 package io.github.redpanda4552.SimpleEgg.command;
 
 import io.github.redpanda4552.SimpleEgg.Main;
+import io.github.redpanda4552.SimpleEgg.util.Text;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class CommandSimpleEgg extends AbstractCommand {
 
-	private final ChatColor a = ChatColor.AQUA;
-	private final ChatColor b = ChatColor.BLUE;
-	
 	public CommandSimpleEgg(Main plugin) {
 		super(plugin);
 	}
@@ -41,11 +38,11 @@ public class CommandSimpleEgg extends AbstractCommand {
 	// Note to future self. These aren't static fields, you can't make these
 	// Strings final. You almost did it once. Don't try again.
 	private String[] help = {
-		a + "== SimpleEgg v" + plugin.getDescription().getVersion() + " by pandubz ==",
-		b + "The alias for " + a + "/simpleegg" + b + " is " + a + "/se" + b + ".",
-        a + "Egg Refunding " + b + "on failed captures is " + a + (plugin.getConfig().getBoolean("egg-refund") == true ? "Enabled" : "Disabled") + b + ".",
-        b + "To capture a mob, throw an " + a + "Egg" + b + " at it. You will need to have " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName +
-        b + " in your inventory. The spawn egg will be dropped where the mob was, and the items will be removed from your inventory."
+		Text.a + "== SimpleEgg v" + plugin.getDescription().getVersion() + " by pandubz ==",
+		Text.b + "The alias for " + Text.a + "/simpleegg" + Text.b + " is " + Text.a + "/se" + Text.b + ".",
+        Text.a + "Egg Refunding " + Text.b + "on failed captures is " + Text.a + (plugin.getConfig().getBoolean("egg-refund") == true ? "Enabled" : "Disabled") + Text.b + ".",
+        Text.b + "To capture a mob, throw an " + Text.a + "Egg" + Text.b + " at it. You will need to have " + Text.a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName +
+        Text.b + " in your inventory. The spawn egg will be dropped where the mob was, and the items will be removed from your inventory."
 	};
 	
 	@Override

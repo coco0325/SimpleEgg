@@ -28,7 +28,6 @@ import io.github.redpanda4552.SimpleEgg.CaptureManager;
 import io.github.redpanda4552.SimpleEgg.Main;
 import io.github.redpanda4552.SimpleEgg.util.*;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
@@ -50,10 +49,6 @@ public class EventListener implements Listener {
 	
 	private EggTracker eggTracker;
 	private CaptureManager captureManager;
-	
-	private final ChatColor a = ChatColor.AQUA;
-	private final ChatColor b = ChatColor.BLUE;
-	private final String tag = a + "[SimpleEgg]" + b + " ";
 	
 	public EventListener(Main plugin) {
 		this.plugin = plugin;
@@ -105,15 +100,15 @@ public class EventListener implements Listener {
 				if (captureManager.hasCaptureMaterials(entry)) {
 					captureManager.makeSpawnEgg(entry);
 				} else {
-					entry.getPlayer().sendMessage(tag + "You need " + a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + b + " to capture a mob.");
+					entry.getPlayer().sendMessage(Text.tag + "You need " + Text.a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + Text.b + " to capture a mob.");
 					refundEgg(entry.getPlayer());
 				}
 			} else {
-				entry.getPlayer().sendMessage(tag + "You do not own this mob.");
+				entry.getPlayer().sendMessage(Text.tag + "You do not own this mob.");
 				refundEgg(entry.getPlayer());
 			}
 		} else {
-			entry.getPlayer().sendMessage(tag + "You do not have permission to capture this mob type.");
+			entry.getPlayer().sendMessage(Text.tag + "You do not have permission to capture this mob type.");
 			refundEgg(entry.getPlayer());
 		}
 		
@@ -161,7 +156,7 @@ public class EventListener implements Listener {
 		if (meta instanceof SpawnEggMeta) {
 			if (meta != null && meta.getLore() != null) {
 				if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: ")) {
-					event.getPlayer().sendMessage(tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+					event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
 					event.setCancelled(true);
 				}
 			}
