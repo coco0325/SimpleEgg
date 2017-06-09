@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.redpanda4552.SimpleEgg;
+package io.github.redpanda4552.SimpleEgg.listeners;
 
 import java.util.ArrayList;
-
-import io.github.redpanda4552.SimpleEgg.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +31,6 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -43,14 +40,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-public class EventListener implements Listener {
-	private Main plugin;
+import io.github.redpanda4552.SimpleEgg.CaptureManager;
+import io.github.redpanda4552.SimpleEgg.EggTracker;
+import io.github.redpanda4552.SimpleEgg.EggTrackerEntry;
+import io.github.redpanda4552.SimpleEgg.Main;
+import io.github.redpanda4552.SimpleEgg.util.LoreExtractor;
+import io.github.redpanda4552.SimpleEgg.util.Text;
+
+public class ListenerEggEvents extends AbstractListener {
 	
 	private EggTracker eggTracker;
 	private CaptureManager captureManager;
 	
-	public EventListener(Main plugin) {
-		this.plugin = plugin;
+	public ListenerEggEvents(Main plugin) {
+		super(plugin);
 		eggTracker = plugin.eggTracker;
 		captureManager = plugin.captureManager;
 	}
