@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.gravitydevelopment.updater;
+package io.github.redpanda4552.SimpleEgg;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -61,7 +61,7 @@ import org.json.simple.JSONValue;
  * @version 2.1
  */
 
-public class SimpleEggUpdater {
+public class UpdateNotifier {
 
      private Plugin plugin;
      private UpdateType type;
@@ -91,7 +91,7 @@ public class SimpleEggUpdater {
      private static final int BYTE_SIZE = 1024; // Used for downloading files
      private final YamlConfiguration config = new YamlConfiguration(); // Config file
      private String updateFolder;// The folder that downloads will be placed in
-     private SimpleEggUpdater.UpdateResult result = SimpleEggUpdater.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
+     private UpdateNotifier.UpdateResult result = UpdateNotifier.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
 
      /**
       * Gives the developer the result of the update process. Can be obtained by called {@link #getResult()}
@@ -180,7 +180,7 @@ public class SimpleEggUpdater {
       * @param type      Specify the type of update this will be. See {@link UpdateType}
       * @param announce True if the program should announce the progress of new updates in console.
       */
-     public SimpleEggUpdater(Plugin plugin, int id, File file, UpdateType type, boolean announce) {
+     public UpdateNotifier(Plugin plugin, int id, File file, UpdateType type, boolean announce) {
           this.plugin = plugin;
           this.type = type;
           this.announce = announce;
@@ -233,7 +233,7 @@ public class SimpleEggUpdater {
           this.apiKey = key;
 
           try {
-                this.url = new URL(SimpleEggUpdater.HOST + SimpleEggUpdater.QUERY + id);
+                this.url = new URL(UpdateNotifier.HOST + UpdateNotifier.QUERY + id);
           } catch (final MalformedURLException e) {
                 plugin.getLogger().log(Level.SEVERE, "The project ID provided for updating, " + id + " is invalid.", e);
                 this.result = UpdateResult.FAIL_BADID;
@@ -249,7 +249,7 @@ public class SimpleEggUpdater {
       * @return result of the update process.
       * @see UpdateResult
       */
-     public SimpleEggUpdater.UpdateResult getResult() {
+     public UpdateNotifier.UpdateResult getResult() {
           this.waitForThread();
           return this.result;
      }
@@ -336,13 +336,13 @@ public class SimpleEggUpdater {
                 in = new BufferedInputStream(url.openStream());
                 fout = new FileOutputStream(folder.getAbsolutePath() + File.separator + file);
 
-                final byte[] data = new byte[SimpleEggUpdater.BYTE_SIZE];
+                final byte[] data = new byte[UpdateNotifier.BYTE_SIZE];
                 int count;
                 if (this.announce) {
                      this.plugin.getLogger().info("About to download a new update: " + this.versionName);
                 }
                 long downloaded = 0;
-                while ((count = in.read(data, 0, SimpleEggUpdater.BYTE_SIZE)) != -1) {
+                while ((count = in.read(data, 0, UpdateNotifier.BYTE_SIZE)) != -1) {
                      downloaded += count;
                      fout.write(data, 0, count);
                      final int percent = (int) ((downloaded * 100) / fileLength);
@@ -367,7 +367,7 @@ public class SimpleEggUpdater {
                 }
           } catch (final Exception ex) {
                 this.plugin.getLogger().warning("The auto-updater tried to download a new update, but was unsuccessful.");
-                this.result = SimpleEggUpdater.UpdateResult.FAIL_DOWNLOAD;
+                this.result = UpdateNotifier.UpdateResult.FAIL_DOWNLOAD;
           } finally {
                 try {
                      if (in != null) {
@@ -401,10 +401,10 @@ public class SimpleEggUpdater {
                      } else {
                           final BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
                           int b;
-                          final byte buffer[] = new byte[SimpleEggUpdater.BYTE_SIZE];
+                          final byte buffer[] = new byte[UpdateNotifier.BYTE_SIZE];
                           final FileOutputStream fos = new FileOutputStream(destinationFilePath);
-                          final BufferedOutputStream bos = new BufferedOutputStream(fos, SimpleEggUpdater.BYTE_SIZE);
-                          while ((b = bis.read(buffer, 0, SimpleEggUpdater.BYTE_SIZE)) != -1) {
+                          final BufferedOutputStream bos = new BufferedOutputStream(fos, UpdateNotifier.BYTE_SIZE);
+                          while ((b = bis.read(buffer, 0, UpdateNotifier.BYTE_SIZE)) != -1) {
                                 bos.write(buffer, 0, b);
                           }
                           bos.flush();
@@ -454,7 +454,7 @@ public class SimpleEggUpdater {
                 fSourceZip.delete();
           } catch (final IOException e) {
                 this.plugin.getLogger().log(Level.SEVERE, "The auto-updater tried to unzip a new update file, but was unsuccessful.", e);
-                this.result = SimpleEggUpdater.UpdateResult.FAIL_DOWNLOAD;
+                this.result = UpdateNotifier.UpdateResult.FAIL_DOWNLOAD;
           }
           new File(file).delete();
      }
@@ -488,7 +488,7 @@ public class SimpleEggUpdater {
 
                      if (this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
                           // We already have the latest version, or this build is tagged for no-update
-                          this.result = SimpleEggUpdater.UpdateResult.NO_UPDATE;
+                          this.result = UpdateNotifier.UpdateResult.NO_UPDATE;
                           return false;
                      }
                 } else {
@@ -497,7 +497,7 @@ public class SimpleEggUpdater {
                      this.plugin.getLogger().warning("The author of this plugin" + authorInfo + " has misconfigured their Auto Update system");
                      this.plugin.getLogger().warning("File versions should follow the format 'PluginName vVERSION'");
                      this.plugin.getLogger().warning("Please notify the author of this error.");
-                     this.result = SimpleEggUpdater.UpdateResult.FAIL_NOVERSION;
+                     this.result = UpdateNotifier.UpdateResult.FAIL_NOVERSION;
                      return false;
                 }
           }
@@ -542,7 +542,7 @@ public class SimpleEggUpdater {
       * @return true if updating should be disabled.
       */
      private boolean hasTag(String version) {
-          for (final String string : SimpleEggUpdater.NO_UPDATE_TAG) {
+          for (final String string : UpdateNotifier.NO_UPDATE_TAG) {
                 if (version.contains(string)) {
                      return true;
                 }
@@ -563,7 +563,7 @@ public class SimpleEggUpdater {
                 if (this.apiKey != null) {
                      conn.addRequestProperty("X-API-Key", this.apiKey);
                 }
-                conn.addRequestProperty("User-Agent", SimpleEggUpdater.USER_AGENT);
+                conn.addRequestProperty("User-Agent", UpdateNotifier.USER_AGENT);
 
                 conn.setDoOutput(true);
 
@@ -578,10 +578,10 @@ public class SimpleEggUpdater {
                      return false;
                 }
 
-                this.versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(SimpleEggUpdater.TITLE_VALUE);
-                this.versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(SimpleEggUpdater.LINK_VALUE);
-                this.versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(SimpleEggUpdater.TYPE_VALUE);
-                this.versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(SimpleEggUpdater.VERSION_VALUE);
+                this.versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.TITLE_VALUE);
+                this.versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.LINK_VALUE);
+                this.versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.TYPE_VALUE);
+                this.versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.VERSION_VALUE);
 
                 return true;
           } catch (final IOException e) {
@@ -603,20 +603,20 @@ public class SimpleEggUpdater {
          
          @Override
           public void run() {
-                if (SimpleEggUpdater.this.url != null) {
+                if (UpdateNotifier.this.url != null) {
                      // Obtain the results of the project's file feed
-                     if (SimpleEggUpdater.this.read()) {
-                          if (SimpleEggUpdater.this.versionCheck(SimpleEggUpdater.this.versionName)) {
-                                if ((SimpleEggUpdater.this.versionLink != null) && (SimpleEggUpdater.this.type != UpdateType.NO_DOWNLOAD)) {
-                                     String name = SimpleEggUpdater.this.file.getName();
+                     if (UpdateNotifier.this.read()) {
+                          if (UpdateNotifier.this.versionCheck(UpdateNotifier.this.versionName)) {
+                                if ((UpdateNotifier.this.versionLink != null) && (UpdateNotifier.this.type != UpdateType.NO_DOWNLOAD)) {
+                                     String name = UpdateNotifier.this.file.getName();
                                      // If it's a zip file, it shouldn't be downloaded as the plugin's name
-                                     if (SimpleEggUpdater.this.versionLink.endsWith(".zip")) {
-                                          final String[] split = SimpleEggUpdater.this.versionLink.split("/");
+                                     if (UpdateNotifier.this.versionLink.endsWith(".zip")) {
+                                          final String[] split = UpdateNotifier.this.versionLink.split("/");
                                           name = split[split.length - 1];
                                      }
-                                     SimpleEggUpdater.this.saveFile(new File(SimpleEggUpdater.this.plugin.getDataFolder().getParent(), SimpleEggUpdater.this.updateFolder), name, SimpleEggUpdater.this.versionLink);
+                                     UpdateNotifier.this.saveFile(new File(UpdateNotifier.this.plugin.getDataFolder().getParent(), UpdateNotifier.this.updateFolder), name, UpdateNotifier.this.versionLink);
                                 } else {
-                                     SimpleEggUpdater.this.result = UpdateResult.UPDATE_AVAILABLE;
+                                     UpdateNotifier.this.result = UpdateResult.UPDATE_AVAILABLE;
                                 }
                           }
                      }

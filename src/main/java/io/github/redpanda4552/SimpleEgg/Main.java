@@ -23,9 +23,8 @@
  */
 package io.github.redpanda4552.SimpleEgg;
 
+import io.github.redpanda4552.SimpleEgg.UpdateNotifier.UpdateResult;
 import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
-import net.gravitydevelopment.updater.SimpleEggUpdater;
-import net.gravitydevelopment.updater.SimpleEggUpdater.UpdateResult;
 
 import java.util.logging.Logger;
 
@@ -80,7 +79,7 @@ public class Main extends JavaPlugin {
             @Override
             public void run() {
                 if (getConfig().getBoolean("update-checks") == true) {
-                    SimpleEggUpdater updater = new SimpleEggUpdater(main, 88959, main.getFile(), SimpleEggUpdater.UpdateType.NO_DOWNLOAD, false);
+                    UpdateNotifier updater = new UpdateNotifier(main, 88959, main.getFile(), UpdateNotifier.UpdateType.NO_DOWNLOAD, false);
                     
                     if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
                         log.info("A new build of SimpleEgg is available!");
