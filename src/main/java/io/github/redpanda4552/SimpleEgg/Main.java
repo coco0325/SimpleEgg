@@ -25,6 +25,8 @@ package io.github.redpanda4552.SimpleEgg;
 
 import io.github.redpanda4552.SimpleEgg.UpdateNotifier.UpdateResult;
 import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
+import io.github.redpanda4552.SimpleEgg.listeners.ListenerEggEvents;
+import io.github.redpanda4552.SimpleEgg.util.Text;
 
 import java.util.logging.Logger;
 
@@ -40,6 +42,7 @@ public class Main extends JavaPlugin {
 	public Material consumedMaterial;
 	public String consumedMaterialName;
 	public int consumedMaterialAmount;
+	public String updateName = null;
 	
 	private final Main main = this;
 	
@@ -65,7 +68,7 @@ public class Main extends JavaPlugin {
 		consumedMaterialName = getConfig().getString("consumed-item-name");
 		captureManager = new CaptureManager(this);
 		eggTracker = new EggTracker();
-		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
 		getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this));
 		runUpdateChecker();
 	}
@@ -82,12 +85,11 @@ public class Main extends JavaPlugin {
                     UpdateNotifier updater = new UpdateNotifier(main, 88959, main.getFile(), UpdateNotifier.UpdateType.NO_DOWNLOAD, false);
                     
                     if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-                        log.info("A new build of SimpleEgg is available!");
-                        log.info("You can find " + updater.getLatestName() + " at: https://dev.bukkit.org/projects/simpleegg");
+                        updateName = updater.getLatestName();
+                        log.info(String.format("%s%s is available at %s", Text.a, updateName, "https://dev.bukkit.org/projects/simpleegg"));
                     }
                 }    
             }
         }.runTaskAsynchronously(main);
-            
     }
 }

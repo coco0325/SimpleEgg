@@ -21,6 +21,11 @@ permissions:
             SimpleEgg.owner-override: true
             SimpleEgg.steal: true
             SimpleEgg.auto-tame: true
+            SimpleEgg.update-notify: true
+    
+    #Admin
+    SimpleEgg.update-notify:
+      description: Allow players to be notified of updates upon login
     
     #Passive
     SimpleEgg.passive:
