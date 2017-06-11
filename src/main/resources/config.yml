@@ -1,31 +1,24 @@
-# If you need to look up the name of a Bukkit Material type, they are all in
-# here: <https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html>
-
-# Whether or not SimpleEgg can automatically check for updates. If enabled, at
-# startup SimpleEgg will communicate with Curse to look for newer builds, and 
-# notify via console if a new build is found.
+# Automatically check for updates. Only notifies, no automatic download.
 update-checks: true
 
-# This is the item consumed when a player catches a mob. Note that this MUST be
-# a valid Bukkit Material type. If it is not, SimpleEgg will say so in console
-# at startup and fall back to diamonds as a default.
+# Exchange system for mob captures. Set to 'item' to utilize item settings, set
+# to 'vault' to use vault settings. Vault settings require the Vault plugin to
+# be installed and running.
+exchange-mode: item
+
+# Item consumed when a player catches a mob. Must be a Bukkit Material type.
+# Types: <https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html>
 consumed-item: DIAMOND
 
-# This is a player-friendly spelling of the above Bukkit Material type. You
-# should type here whatever you want to show up in the help dialogues that tell
-# players what item to use. If the below quantity is more than 1, or you set it
-# to 0, then you should make this name plural.
+# The name of the above material type that will show in the /simpleegg command
 consumed-item-name: Diamonds
 
-# How many of the above item do you want to be used per capture? Setting this to
-# zero will simply not require any items in a player's inventory in order to
-# capture.
+# Number of items required per capture. Set to 0 to require no items.
 consumed-item-amount: 5
 
-# If a capture fails because the player does not have permission to capture the
-# mob type, does not own the mob, or does not have enough of the required
-# materials for capture, should they get their egg back? Don't worry about
-# exploiting infinite eggs; SimpleEgg will block chickens from spawning from a
-# failed capture attempt.
+# The amount of currency to charge per mob capture.
+vault-cost: 100
+
+# Refund egg if capture requirements not met.
 egg-refund: true
 
