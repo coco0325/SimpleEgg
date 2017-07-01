@@ -1,6 +1,6 @@
 main: io.github.redpanda4552.SimpleEgg.Main
 name: SimpleEgg
-version: 0.2.0
+version: 0.3.0
 author: bdubz4552
 description: A plugin to allow the capture and conversion of living entites to spawn eggs.
 
@@ -9,7 +9,7 @@ commands:
         description: Help command for SimpleEgg
         usage: /simpleegg
         aliases: se
-          
+
 permissions:
     #Global
     SimpleEgg.*:
@@ -22,11 +22,11 @@ permissions:
             SimpleEgg.steal: true
             SimpleEgg.auto-tame: true
             SimpleEgg.update-notify: true
-    
+
     #Admin
     SimpleEgg.update-notify:
       description: Allow players to be notified of updates upon login
-    
+
     #Passive
     SimpleEgg.passive:
         children:
@@ -63,11 +63,11 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.irongolem:
         description: Allows capturing of this mob
-    
+
     #Villager
     SimpleEgg.villager:
         description: Allows capturing of this mob
-     
+
     #Tameable
     SimpleEgg.tameable:
         children:
@@ -95,7 +95,7 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.ocelot:
         description: Allows capturing of this mob
-     
+
     #Monsters
     SimpleEgg.monster:
         children:
@@ -123,7 +123,7 @@ permissions:
             SimpleEgg.evoker: true
             SimpleEgg.vex: true
             SimpleEgg.vindicator: true
-            
+
     SimpleEgg.magmacube:
         description: Allows capturing of this mob
     SimpleEgg.blaze:
@@ -172,7 +172,7 @@ permissions:
         description: Allows capturing of this mob
     SimpleEgg.vindicator:
         description: Allows capturing of this mob
-        
+
     #Ownership Modifications
     SimpleEgg.owner-override:
         description: Allows a player to capture a tameable mob even if someone else owns it.
