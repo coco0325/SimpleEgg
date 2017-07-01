@@ -31,18 +31,29 @@ import org.bukkit.command.CommandSender;
 
 public class CommandSimpleEgg extends AbstractCommand {
 
-	public CommandSimpleEgg(Main plugin) {
+    private boolean eggRefund;
+    private String costStr;
+    
+	public CommandSimpleEgg(Main plugin, boolean eggRefund, String name, double amount) {
 		super(plugin);
+		this.eggRefund = eggRefund;
+		costStr = String.format("%s%s %s", Text.a, amount, name);
 	}
+	
+	public CommandSimpleEgg(Main plugin, boolean eggRefund, String name, int amount) {
+        super(plugin);
+        this.eggRefund = eggRefund;
+        costStr = String.format("%s%s %s", Text.a, amount, name);
+    }
 	
 	// Note to future self. These aren't static fields, you can't make these
 	// Strings final. You almost did it once. Don't try again.
 	private String[] help = {
-		Text.a + "== SimpleEgg v" + plugin.getDescription().getVersion() + " by pandubz ==",
-		Text.b + "The alias for " + Text.a + "/simpleegg" + Text.b + " is " + Text.a + "/se" + Text.b + ".",
-        Text.a + "Egg Refunding " + Text.b + "on failed captures is " + Text.a + (plugin.getConfig().getBoolean("egg-refund") == true ? "Enabled" : "Disabled") + Text.b + ".",
-        Text.b + "To capture a mob, throw an " + Text.a + "Egg" + Text.b + " at it. You will need to have " + Text.a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName +
-        Text.b + " in your inventory. The spawn egg will be dropped where the mob was, and the items will be removed from your inventory."
+	    String.format("%s==SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
+	    String.format("%sThe alias for %s/simpleegg %sis %s/se %s.", Text.b, Text.a, Text.b, Text.a, Text.b),
+	    String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
+	    String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
+        String.format("%sEach capture will cost %s%s%s.", Text.b, Text.a, costStr, Text.b)
 	};
 	
 	@Override
