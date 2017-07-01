@@ -23,55 +23,91 @@
  */
 package io.github.redpanda4552.SimpleEgg;
 
-import io.github.redpanda4552.SimpleEgg.UpdateNotifier.UpdateResult;
-import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
-import io.github.redpanda4552.SimpleEgg.listeners.ListenerEggEvents;
-import io.github.redpanda4552.SimpleEgg.util.Text;
-
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import io.github.redpanda4552.SimpleEgg.UpdateNotifier.UpdateResult;
+import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
+import io.github.redpanda4552.SimpleEgg.listeners.ListenerEggEvents;
+import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
+import io.github.redpanda4552.SimpleEgg.util.Text;
+import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
 
 	public Logger log;
-	public CaptureManager captureManager;
-	public EggTracker eggTracker;
-	public Material consumedMaterial;
-	public String consumedMaterialName;
-	public int consumedMaterialAmount;
-	public String updateName = null;
 	
+	private CaptureManager captureManager;
+	private EggTracker eggTracker;
+	private ExpenseHandler expenseHandler;
+	private Economy vaultEconomy = null;
+	private String updateName = null;
+	
+	// For the update notifier only
 	private final Main main = this;
 	
 	public void onEnable() {
 		log = getLogger();
 		saveDefaultConfig();
 		
-		try {
-			consumedMaterial = Material.valueOf(getConfig().getString("consumed-item"));
-		} catch (IllegalArgumentException e) {
-			log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
-			consumedMaterial = Material.DIAMOND;
+		// Configuration settings (that have failsafes)
+		String exchangeMode = getConfig().getString("exchange-mode");
+		boolean eggRefund = getConfig().getBoolean("egg-refund");
+		double vaultCost = getConfig().getDouble("vault-cost");
+		String consumedItemName = getConfig().getString("consumed-item-name");
+		int consumedItemAmount = getConfig().getInt("consumed-item-amount");
+		
+		if (exchangeMode.equalsIgnoreCase("vault") && setupEconomy()) {
+		    log.info("Starting in Vault mode");
+		    expenseHandler = new ExpenseHandler(this, getConfig().getDouble("vault-cost"));
+		    getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, vaultEconomy.currencyNamePlural(), vaultCost));
+		} else {
+		    log.info("Starting in Item mode");
+		    Material consumedItem;
+		    
+		    // No failover for this so we need to try/catch
+		    try {
+	            consumedItem = Material.valueOf(getConfig().getString("consumed-item"));
+	        } catch (IllegalArgumentException e) {
+	            log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
+	            consumedItem = Material.valueOf(getConfig().getDefaults().getString("consumed-item"));
+	        }
+		    
+		    expenseHandler = new ExpenseHandler(consumedItem, consumedItemAmount);
+		    getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, consumedItemName, consumedItemAmount));
 		}
 		
-		try {
-			Integer.parseInt(getConfig().getString("consumed-item-amount"));
-			consumedMaterialAmount = getConfig().getInt("consumed-item-amount");
-		} catch (NumberFormatException e) {
-			log.warning("Config entry 'consumed-item-amount' is not an integer! Defaulting to 5.");
-			consumedMaterialAmount = 5;
-		}
-		
-		consumedMaterialName = getConfig().getString("consumed-item-name");
 		captureManager = new CaptureManager(this);
 		eggTracker = new EggTracker();
 		getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
-		getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this));
 		runUpdateChecker();
 	}
+	
+	private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+            
+            if (rsp != null) {
+                vaultEconomy = rsp.getProvider();
+                
+                if (vaultEconomy != null) {
+                    return true;
+                } else {
+                    log.warning("Failed to get provider for Vault economy; aborting Vault mode");
+                }
+            } else {
+                log.warning("Failed to get registration for Vault economy; aborting Vault mode");
+            }
+        } else {
+            log.info("Vault not present; aborting Vault mode");
+        }
+        
+        return false;
+    }
 	
 	/**
      * Update notifier; only notifies, does not download.
@@ -91,5 +127,21 @@ public class Main extends JavaPlugin {
                 }    
             }
         }.runTaskAsynchronously(main);
+    }
+    
+    public CaptureManager getCaptureManager() {
+        return captureManager;
+    }
+    
+    public EggTracker getEggTracker() {
+        return eggTracker;
+    }
+    
+    public ExpenseHandler getExpenseHandler() {
+        return expenseHandler;
+    }
+    
+    public Economy getVaultEconomy() {
+        return vaultEconomy;
     }
 }

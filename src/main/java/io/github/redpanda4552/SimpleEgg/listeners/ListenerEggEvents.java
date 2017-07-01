@@ -44,18 +44,21 @@ import io.github.redpanda4552.SimpleEgg.CaptureManager;
 import io.github.redpanda4552.SimpleEgg.EggTracker;
 import io.github.redpanda4552.SimpleEgg.EggTrackerEntry;
 import io.github.redpanda4552.SimpleEgg.Main;
+import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.util.LoreExtractor;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class ListenerEggEvents extends AbstractListener {
 	
 	private EggTracker eggTracker;
+	private ExpenseHandler expenseHandler;
 	private CaptureManager captureManager;
 	
 	public ListenerEggEvents(Main plugin) {
 		super(plugin);
-		eggTracker = plugin.eggTracker;
-		captureManager = plugin.captureManager;
+		eggTracker = plugin.getEggTracker();
+		expenseHandler = plugin.getExpenseHandler();
+		captureManager = plugin.getCaptureManager();
 	}
 	
 	/**
@@ -99,10 +102,10 @@ public class ListenerEggEvents extends AbstractListener {
 		
 		if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase())) {
 			if (!captureManager.ownerConfliction(entry)) {
-				if (captureManager.hasCaptureMaterials(entry)) {
+				if (expenseHandler.hasMaterials(entry.getPlayer())) {
 					captureManager.makeSpawnEgg(entry);
 				} else {
-					entry.getPlayer().sendMessage(Text.tag + "You need " + Text.a + plugin.consumedMaterialAmount + " " + plugin.consumedMaterialName + Text.b + " to capture a mob.");
+					entry.getPlayer().sendMessage(Text.tag + "You need " + Text.a + expenseHandler.requiredMaterials() + Text.b + " to capture a mob.");
 					refundEgg(entry.getPlayer());
 				}
 			} else {

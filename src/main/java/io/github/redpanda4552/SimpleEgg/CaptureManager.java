@@ -27,19 +27,19 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
+import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.util.LorePacker;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class CaptureManager {
 
-	private Main plugin;
+    private ExpenseHandler expenseHandler;
 	
 	public CaptureManager(Main plugin) {
-		this.plugin = plugin;
+	    expenseHandler = plugin.getExpenseHandler();
 	}
 	
 	/**
@@ -73,38 +73,14 @@ public class CaptureManager {
 	}
 	
 	/**
-	 * Check if a Player has the materials required for a capture.
-	 * @param entry - The EggTrackerEntry tied to this event.
-	 * @return True if the Player has the necessary materials, or false if not.
-	 */
-	public boolean hasCaptureMaterials(EggTrackerEntry entry) {
-		Player player = entry.getPlayer();
-		Inventory inventory = player.getInventory();
-		
-		if (inventory.contains(plugin.consumedMaterial, plugin.consumedMaterialAmount)) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Generates a SpawnEgg, assigns data to it and drops it where the mob used to be.
+	 * Makes a call to the ExpenseHandler, generates a SpawnEgg, assigns data to
+	 * it and drops it where the mob used to be.
 	 * @param entry - The EggTrackerEntry we are dealing with for this SpawnEgg.
 	 */
 	public void makeSpawnEgg(EggTrackerEntry entry) {
 		Player player = entry.getPlayer();
 		LivingEntity livingEntity = entry.getEntity();
-		Inventory inventory = player.getInventory();
-		
-		for (int i = plugin.consumedMaterialAmount; i != 0; i--) {
-			if (inventory.getItem(inventory.first(plugin.consumedMaterial)).getAmount() > 1) {
-				inventory.getItem(inventory.first(plugin.consumedMaterial)).setAmount(inventory.getItem(inventory.first(plugin.consumedMaterial)).getAmount() - 1);
-			} else {
-				inventory.remove(inventory.getItem(inventory.first(plugin.consumedMaterial)));
-			}
-		}
-
+		expenseHandler.execute(player);
 		ItemStack stack = new ItemStack(Material.MONSTER_EGG);
 		SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
 		meta.setSpawnedType(livingEntity.getType());
