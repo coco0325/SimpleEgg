@@ -37,64 +37,64 @@ import io.github.redpanda4552.SimpleEgg.util.Text;
 public class CaptureManager {
 
     private ExpenseHandler expenseHandler;
-	
-	public CaptureManager(Main plugin) {
-	    expenseHandler = plugin.getExpenseHandler();
-	}
-	
-	/**
-	 * Checks if there is an owner confliction in this EggTrackerEntry.
-	 * @param entry - The EggTrackerEntry to test.
-	 * @return True if a confliction is present, false if not.
-	 */
-	public boolean ownerConfliction(EggTrackerEntry entry) {
-		if (entry.getEntity() instanceof Tameable) {
-			Tameable tameable = (Tameable) entry.getEntity();
-			
-			// Order in the below statements is important. Owner override must be first, otherwise it will never be hit.
-			if (tameable.getOwner() != null) {
-			    if (entry.getPlayer().hasPermission("SimpleEgg.owner-override")) {
-	                if (entry.getPlayer().hasPermission("SimpleEgg.steal")) {
-	                    tameable.setOwner(entry.getPlayer());
-	                }
-	                
-	                return false;
-	            }
-			} else if (entry.getPlayer().hasPermission("SimpleEgg.auto-tame")) {
-			    tameable.setOwner(entry.getPlayer());
-			}
-			
-			if (tameable.getOwner() != null && tameable.getOwner() != entry.getPlayer()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Makes a call to the ExpenseHandler, generates a SpawnEgg, assigns data to
-	 * it and drops it where the mob used to be.
-	 * @param entry - The EggTrackerEntry we are dealing with for this SpawnEgg.
-	 */
-	public void makeSpawnEgg(EggTrackerEntry entry) {
-		Player player = entry.getPlayer();
-		LivingEntity livingEntity = entry.getEntity();
-		expenseHandler.execute(player);
-		ItemStack stack = new ItemStack(Material.MONSTER_EGG);
-		SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
-		meta.setSpawnedType(livingEntity.getType());
-		String name = livingEntity.getType().getEntityClass().getSimpleName();
-		
-		if (livingEntity.getCustomName() != null) {
-			name += ": " + livingEntity.getCustomName();
-		}
-		
-		meta.setDisplayName(name);
-		meta.setLore(new LorePacker(livingEntity).getLore());
+    
+    public CaptureManager(Main plugin) {
+        expenseHandler = plugin.getExpenseHandler();
+    }
+    
+    /**
+     * Checks if there is an owner confliction in this EggTrackerEntry.
+     * @param entry - The EggTrackerEntry to test.
+     * @return True if a confliction is present, false if not.
+     */
+    public boolean ownerConfliction(EggTrackerEntry entry) {
+        if (entry.getEntity() instanceof Tameable) {
+            Tameable tameable = (Tameable) entry.getEntity();
+            
+            // Order in the below statements is important. Owner override must be first, otherwise it will never be hit.
+            if (tameable.getOwner() != null) {
+                if (entry.getPlayer().hasPermission("SimpleEgg.owner-override")) {
+                    if (entry.getPlayer().hasPermission("SimpleEgg.steal")) {
+                        tameable.setOwner(entry.getPlayer());
+                    }
+                    
+                    return false;
+                }
+            } else if (entry.getPlayer().hasPermission("SimpleEgg.auto-tame")) {
+                tameable.setOwner(entry.getPlayer());
+            }
+            
+            if (tameable.getOwner() != null && tameable.getOwner() != entry.getPlayer()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Makes a call to the ExpenseHandler, generates a SpawnEgg, assigns data to
+     * it and drops it where the mob used to be.
+     * @param entry - The EggTrackerEntry we are dealing with for this SpawnEgg.
+     */
+    public void makeSpawnEgg(EggTrackerEntry entry) {
+        Player player = entry.getPlayer();
+        LivingEntity livingEntity = entry.getEntity();
+        expenseHandler.execute(player);
+        ItemStack stack = new ItemStack(Material.MONSTER_EGG);
+        SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
+        meta.setSpawnedType(livingEntity.getType());
+        String name = livingEntity.getType().getEntityClass().getSimpleName();
+        
+        if (livingEntity.getCustomName() != null) {
+            name += ": " + livingEntity.getCustomName();
+        }
+        
+        meta.setDisplayName(name);
+        meta.setLore(new LorePacker(livingEntity).getLore());
         stack.setItemMeta(meta);
         livingEntity.getWorld().dropItem(livingEntity.getLocation(), stack);
         livingEntity.remove();
         player.sendMessage(Text.tag + "Mob captured successfully!");
-	}
+    }
 }

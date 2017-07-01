@@ -29,29 +29,29 @@ import org.bukkit.entity.Player;
 
 public class EggTrackerEntry {
 
-	private Player player;
-	private LivingEntity entity;
-	private Egg egg;
-	
-	public EggTrackerEntry(Player player, LivingEntity entity, Egg egg) {
-		this.player = player;
-		this.entity = entity;
-		this.egg = egg;		
-	}
-	
-	public Player getPlayer() {
-		return this.player;
-	}
-	
-	public LivingEntity getEntity() {
-		return this.entity;
-	}
-	
-	public Egg getEgg() {
-		return this.egg;
-	}
-	
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
+    private Player player;
+    private LivingEntity entity;
+    private Egg egg;
+    
+    public EggTrackerEntry(Player player, LivingEntity entity, Egg egg) {
+        this.player = player;
+        this.entity = entity;
+        this.egg = egg;        
+    }
+    
+    public Player getPlayer() {
+        return this.player;
+    }
+    
+    public LivingEntity getEntity() {
+        return this.entity;
+    }
+    
+    public Egg getEgg() {
+        return this.egg;
+    }
+    
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

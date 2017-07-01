@@ -39,55 +39,55 @@ import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
 
-	public Logger log;
-	
-	private CaptureManager captureManager;
-	private EggTracker eggTracker;
-	private ExpenseHandler expenseHandler;
-	private Economy vaultEconomy = null;
-	private String updateName = null;
-	
-	// For the update notifier only
-	private final Main main = this;
-	
-	public void onEnable() {
-		log = getLogger();
-		saveDefaultConfig();
-		
-		// Configuration settings (that have failsafes)
-		String exchangeMode = getConfig().getString("exchange-mode");
-		boolean eggRefund = getConfig().getBoolean("egg-refund");
-		double vaultCost = getConfig().getDouble("vault-cost");
-		String consumedItemName = getConfig().getString("consumed-item-name");
-		int consumedItemAmount = getConfig().getInt("consumed-item-amount");
-		
-		if (exchangeMode.equalsIgnoreCase("vault") && setupEconomy()) {
-		    log.info("Starting in Vault mode");
-		    expenseHandler = new ExpenseHandler(this, getConfig().getDouble("vault-cost"));
-		    getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, vaultEconomy.currencyNamePlural(), vaultCost));
-		} else {
-		    log.info("Starting in Item mode");
-		    Material consumedItem;
-		    
-		    // No failover for this so we need to try/catch
-		    try {
-	            consumedItem = Material.valueOf(getConfig().getString("consumed-item"));
-	        } catch (IllegalArgumentException e) {
-	            log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
-	            consumedItem = Material.valueOf(getConfig().getDefaults().getString("consumed-item"));
-	        }
-		    
-		    expenseHandler = new ExpenseHandler(consumedItem, consumedItemAmount);
-		    getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, consumedItemName, consumedItemAmount));
-		}
-		
-		captureManager = new CaptureManager(this);
-		eggTracker = new EggTracker();
-		getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
-		runUpdateChecker();
-	}
-	
-	private boolean setupEconomy() {
+    public Logger log;
+    
+    private CaptureManager captureManager;
+    private EggTracker eggTracker;
+    private ExpenseHandler expenseHandler;
+    private Economy vaultEconomy = null;
+    private String updateName = null;
+    
+    // For the update notifier only
+    private final Main main = this;
+    
+    public void onEnable() {
+        log = getLogger();
+        saveDefaultConfig();
+        
+        // Configuration settings (that have failsafes)
+        String exchangeMode = getConfig().getString("exchange-mode");
+        boolean eggRefund = getConfig().getBoolean("egg-refund");
+        double vaultCost = getConfig().getDouble("vault-cost");
+        String consumedItemName = getConfig().getString("consumed-item-name");
+        int consumedItemAmount = getConfig().getInt("consumed-item-amount");
+        
+        if (exchangeMode.equalsIgnoreCase("vault") && setupEconomy()) {
+            log.info("Starting in Vault mode");
+            expenseHandler = new ExpenseHandler(this, getConfig().getDouble("vault-cost"));
+            getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, vaultEconomy.currencyNamePlural(), vaultCost));
+        } else {
+            log.info("Starting in Item mode");
+            Material consumedItem;
+            
+            // No failover for this so we need to try/catch
+            try {
+                consumedItem = Material.valueOf(getConfig().getString("consumed-item"));
+            } catch (IllegalArgumentException e) {
+                log.warning("Config entry 'consumed-item' is not a valid Bukkit Material type! Defaulting to Diamonds.");
+                consumedItem = Material.valueOf(getConfig().getDefaults().getString("consumed-item"));
+            }
+            
+            expenseHandler = new ExpenseHandler(consumedItem, consumedItemAmount);
+            getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, consumedItemName, consumedItemAmount));
+        }
+        
+        captureManager = new CaptureManager(this);
+        eggTracker = new EggTracker();
+        getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
+        runUpdateChecker();
+    }
+    
+    private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
             
@@ -108,8 +108,8 @@ public class Main extends JavaPlugin {
         
         return false;
     }
-	
-	/**
+    
+    /**
      * Update notifier; only notifies, does not download.
      * Utilizes Gravity's Updater class.
      */

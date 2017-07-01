@@ -33,9 +33,9 @@ import io.github.redpanda4552.SimpleEgg.Main;
  */
 public abstract class AbstractCommand implements CommandExecutor {
 
-	protected Main plugin;
-	
-	public AbstractCommand(Main plugin) {
-		this.plugin = plugin;
-	}
+    protected Main plugin;
+    
+    public AbstractCommand(Main plugin) {
+        this.plugin = plugin;
+    }
 }

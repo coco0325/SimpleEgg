@@ -49,128 +49,128 @@ import io.github.redpanda4552.SimpleEgg.util.LoreExtractor;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class ListenerEggEvents extends AbstractListener {
-	
-	private EggTracker eggTracker;
-	private ExpenseHandler expenseHandler;
-	private CaptureManager captureManager;
-	
-	public ListenerEggEvents(Main plugin) {
-		super(plugin);
-		eggTracker = plugin.getEggTracker();
-		expenseHandler = plugin.getExpenseHandler();
-		captureManager = plugin.getCaptureManager();
-	}
-	
-	/**
-	 * By some witchcraft this event fires before PlayerEggThrowEvent.
-	 * Don't ask questions, just accept that it works.
-	 */
-	@EventHandler
-	public void onEggCollide(EntityDamageByEntityEvent event) {
-		LivingEntity entity; Egg egg;
-		
-		if (event.getDamager() instanceof Egg) {
-			egg = (Egg) event.getDamager();
-		} else {
-			return;
-		}
-		
-		if (event.getEntity() instanceof LivingEntity) {
-			entity = (LivingEntity) event.getEntity();
-		} else {
-			return;
-		}
-		
-		eggTracker.addEntry(new EggTrackerEntry(null, entity, egg));
-	}
-	
-	/**
-	 * This fires after the damage event does, so this, somehow, works.
-	 */
-	@EventHandler
-	public void eggCollide(PlayerEggThrowEvent event) {
-		if (eggTracker.getEntry(event.getEgg()) != null) {
-		    eggTracker.getEntry(event.getEgg()).setPlayer(event.getPlayer());
-			event.setHatching(false);
-		} else {
-			return;
-		}
-		
-		// The player is undefined before we set it above. So to make sure the
-		// local var is in fact a true copy, we will define it post assignment.
-		EggTrackerEntry entry = eggTracker.getEntry(event.getEgg());
-		
-		if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase())) {
-			if (!captureManager.ownerConfliction(entry)) {
-				if (expenseHandler.hasMaterials(entry.getPlayer())) {
-					captureManager.makeSpawnEgg(entry);
-				} else {
-					entry.getPlayer().sendMessage(Text.tag + "You need " + Text.a + expenseHandler.requiredMaterials() + Text.b + " to capture a mob.");
-					refundEgg(entry.getPlayer());
-				}
-			} else {
-				entry.getPlayer().sendMessage(Text.tag + "You do not own this mob.");
-				refundEgg(entry.getPlayer());
-			}
-		} else {
-			entry.getPlayer().sendMessage(Text.tag + "You do not have permission to capture this mob type.");
-			refundEgg(entry.getPlayer());
-		}
-		
-		eggTracker.removeEntry(entry);
-	}
-	
-	@EventHandler
-	public void eggUse(PlayerInteractEvent event) {
-		if (event.getItem() != null && event.getItem().getItemMeta() instanceof SpawnEggMeta && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			ItemStack stack = event.getItem();
-			SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
-			ArrayList<String> lore = (ArrayList<String>) meta.getLore();
+    
+    private EggTracker eggTracker;
+    private ExpenseHandler expenseHandler;
+    private CaptureManager captureManager;
+    
+    public ListenerEggEvents(Main plugin) {
+        super(plugin);
+        eggTracker = plugin.getEggTracker();
+        expenseHandler = plugin.getExpenseHandler();
+        captureManager = plugin.getCaptureManager();
+    }
+    
+    /**
+     * By some witchcraft this event fires before PlayerEggThrowEvent.
+     * Don't ask questions, just accept that it works.
+     */
+    @EventHandler
+    public void onEggCollide(EntityDamageByEntityEvent event) {
+        LivingEntity entity; Egg egg;
+        
+        if (event.getDamager() instanceof Egg) {
+            egg = (Egg) event.getDamager();
+        } else {
+            return;
+        }
+        
+        if (event.getEntity() instanceof LivingEntity) {
+            entity = (LivingEntity) event.getEntity();
+        } else {
+            return;
+        }
+        
+        eggTracker.addEntry(new EggTrackerEntry(null, entity, egg));
+    }
+    
+    /**
+     * This fires after the damage event does, so this, somehow, works.
+     */
+    @EventHandler
+    public void eggCollide(PlayerEggThrowEvent event) {
+        if (eggTracker.getEntry(event.getEgg()) != null) {
+            eggTracker.getEntry(event.getEgg()).setPlayer(event.getPlayer());
+            event.setHatching(false);
+        } else {
+            return;
+        }
+        
+        // The player is undefined before we set it above. So to make sure the
+        // local var is in fact a true copy, we will define it post assignment.
+        EggTrackerEntry entry = eggTracker.getEntry(event.getEgg());
+        
+        if (entry.getPlayer().hasPermission("SimpleEgg." + entry.getEntity().getType().toString().replaceAll("_", "").toLowerCase())) {
+            if (!captureManager.ownerConfliction(entry)) {
+                if (expenseHandler.hasMaterials(entry.getPlayer())) {
+                    captureManager.makeSpawnEgg(entry);
+                } else {
+                    entry.getPlayer().sendMessage(Text.tag + "You need " + Text.a + expenseHandler.requiredMaterials() + Text.b + " to capture a mob.");
+                    refundEgg(entry.getPlayer());
+                }
+            } else {
+                entry.getPlayer().sendMessage(Text.tag + "You do not own this mob.");
+                refundEgg(entry.getPlayer());
+            }
+        } else {
+            entry.getPlayer().sendMessage(Text.tag + "You do not have permission to capture this mob type.");
+            refundEgg(entry.getPlayer());
+        }
+        
+        eggTracker.removeEntry(entry);
+    }
+    
+    @EventHandler
+    public void eggUse(PlayerInteractEvent event) {
+        if (event.getItem() != null && event.getItem().getItemMeta() instanceof SpawnEggMeta && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            ItemStack stack = event.getItem();
+            SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
+            ArrayList<String> lore = (ArrayList<String>) meta.getLore();
 
-			// Check the first line for health, to see if we have a SimpleEgg.
-			if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
-				event.setCancelled(true);
-				LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
-				
-				if (stack.getAmount() > 1) {
-					stack.setAmount(stack.getAmount() - 1);
-				} else {
-					event.getPlayer().getInventory().remove(stack);
-				}
-				
-				// If the ItemStack name contains ": ", that means the mob has a custom name.
-				// Below we will use ": " as a delimeter to split and remove the preceding mob type,
-				// as well as the ": ", isolating the actual name.
-				if (meta.getDisplayName().contains(": ")) {
-				    String customName = meta.getDisplayName();
-				    customName = customName.replaceFirst(meta.getDisplayName().split(": ")[0], "");
-				    customName = customName.replaceFirst(": ", "");
-				    livingEntity.setCustomName(customName);
-				}
-				
-				new LoreExtractor(lore, livingEntity);
-			}
-		}
-	}
-	
-	@EventHandler
-	public void eggUseOnEntity(PlayerInteractEntityEvent event) {
-		ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
-		ItemMeta meta = stack.getItemMeta();
-		
-		if (meta instanceof SpawnEggMeta) {
-			if (meta != null && meta.getLore() != null) {
-				if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: ")) {
-					event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
-					event.setCancelled(true);
-				}
-			}
-		}
-	}
-	
-	private void refundEgg(Player player) {
-		if (plugin.getConfig().getBoolean("egg-refund")) {
-			player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
-		}
-	}
+            // Check the first line for health, to see if we have a SimpleEgg.
+            if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
+                event.setCancelled(true);
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+                
+                if (stack.getAmount() > 1) {
+                    stack.setAmount(stack.getAmount() - 1);
+                } else {
+                    event.getPlayer().getInventory().remove(stack);
+                }
+                
+                // If the ItemStack name contains ": ", that means the mob has a custom name.
+                // Below we will use ": " as a delimeter to split and remove the preceding mob type,
+                // as well as the ": ", isolating the actual name.
+                if (meta.getDisplayName().contains(": ")) {
+                    String customName = meta.getDisplayName();
+                    customName = customName.replaceFirst(meta.getDisplayName().split(": ")[0], "");
+                    customName = customName.replaceFirst(": ", "");
+                    livingEntity.setCustomName(customName);
+                }
+                
+                new LoreExtractor(lore, livingEntity);
+            }
+        }
+    }
+    
+    @EventHandler
+    public void eggUseOnEntity(PlayerInteractEntityEvent event) {
+        ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
+        ItemMeta meta = stack.getItemMeta();
+        
+        if (meta instanceof SpawnEggMeta) {
+            if (meta != null && meta.getLore() != null) {
+                if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: ")) {
+                    event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+    
+    private void refundEgg(Player player) {
+        if (plugin.getConfig().getBoolean("egg-refund")) {
+            player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
+        }
+    }
 }
