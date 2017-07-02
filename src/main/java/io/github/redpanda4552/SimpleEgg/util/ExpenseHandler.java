@@ -37,13 +37,15 @@ public class ExpenseHandler {
     }
     
     private Material itemMaterial;
+    private String itemName;
     private int itemAmount;
     private double vaultAmount;
     private ExchangeMode exchangeMode;
     private Economy economy;
     
-    public ExpenseHandler(Material itemMaterial, int itemAmount) {
+    public ExpenseHandler(Material itemMaterial, String itemName, int itemAmount) {
         this.itemMaterial = itemMaterial;
+        this.itemName = itemName;
         this.itemAmount = itemAmount;
         exchangeMode = ExchangeMode.ITEM;
     }
@@ -105,7 +107,7 @@ public class ExpenseHandler {
         StringBuilder ret = new StringBuilder();
         
         if (exchangeMode == ExchangeMode.ITEM) {
-            ret.append(itemAmount).append(" ").append(itemMaterial);
+            ret.append(itemAmount).append(" ").append(itemName);
         } else if (exchangeMode == ExchangeMode.VAULT) {
             ret.append(vaultAmount).append(" ").append(economy.currencyNamePlural());
         }

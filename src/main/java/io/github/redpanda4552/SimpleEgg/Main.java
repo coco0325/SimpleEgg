@@ -78,7 +78,7 @@ public class Main extends JavaPlugin {
                 consumedItem = Material.valueOf(getConfig().getDefaults().getString("consumed-item"));
             }
             
-            expenseHandler = new ExpenseHandler(consumedItem, consumedItemAmount);
+            expenseHandler = new ExpenseHandler(consumedItem, consumedItemName, consumedItemAmount);
             getCommand("simpleegg").setExecutor(new CommandSimpleEgg(this, eggRefund, consumedItemName, consumedItemAmount));
         }
         
