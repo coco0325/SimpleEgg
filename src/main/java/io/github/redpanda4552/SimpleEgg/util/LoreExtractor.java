@@ -64,12 +64,14 @@ public class LoreExtractor {
     private HashMap<String, String> attributeMap;
     
     /**
-     * Assembles an ArrayList of the properties for the specified Entity that
-     * is to be used for a spawn egg. All instanceof checks are done internally
-     * by the LorePackager, so no type checking is required prior to calling
-     * this method. Null Entities will throw an IllegalArgumentException.
+     * Applies attributes stored in a lore ArrayList to a LivingEntity. In the
+     * case of proper, untampered SimpleEggs, all instanceof checks should have
+     * been previously handled by the LorePackager, so no type checking should
+     * be required prior to calling this method, and by extension any type
+     * compatibility issues will be an indication of tampering. Null Entities
+     * will throw an IllegalArgumentException.
+     * @param lore - The lore ArrayList to apply.
      * @param livingEntity - The Entity to assemble a lore for.
-     * @return An ArrayList of Strings
      * @throws IllegalArgumentException If entity parameter is null
      */
     public LoreExtractor(ArrayList<String> lore, LivingEntity livingEntity) throws IllegalArgumentException {
@@ -145,6 +147,7 @@ public class LoreExtractor {
     
     // Entity specific methods
     private void livingEntity(LivingEntity livingEntity) {
+        livingEntity.setCustomName(attributeMap.get("Custom Name"));
         String[] healthStrings = attributeMap.get("Health").split("/");
         livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Double.parseDouble(healthStrings[1]));
         livingEntity.setHealth(Double.parseDouble(healthStrings[0]));

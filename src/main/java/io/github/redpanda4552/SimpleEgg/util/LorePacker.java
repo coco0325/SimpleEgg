@@ -71,6 +71,8 @@ public class LorePacker {
         }
         
         lore = new ArrayList<String>();
+        // This needs to always be on top of an egg's lore
+        lore.add("Identifier: SimpleEgg." + livingEntity.getType().getEntityClass().getSimpleName());
         lore.addAll(livingEntity(livingEntity));
         
         if (livingEntity instanceof Ageable) {
@@ -133,6 +135,11 @@ public class LorePacker {
     // Entity specific methods
     private ArrayList<String> livingEntity(LivingEntity livingEntity) {
         ArrayList<String> ret = new ArrayList<String>();
+        
+        if (livingEntity.getCustomName() != null) {
+            ret.add("Custom Name: " + livingEntity.getCustomName());
+        }
+        
         ret.add("Health: " + livingEntity.getHealth() + "/" + livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         ret.add("Speed: " + livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
         return ret;

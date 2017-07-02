@@ -126,8 +126,25 @@ public class ListenerEggEvents extends AbstractListener {
             ItemStack stack = event.getItem();
             SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
+            
+            // Use a more specific identifier line, instead of the health line
+            if (isSimpleEgg(meta)) {
+                event.setCancelled(true);
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+                
+                if (stack.getAmount() > 1) {
+                    stack.setAmount(stack.getAmount() - 1);
+                } else {
+                    event.getPlayer().getInventory().remove(stack);
+                }
+                
+                // The legacy code for the display name is arbitrary. New eggs
+                // will have a custom name field in the lore body, if present,
+                // and the display name is now just for show and not saved data.
+                new LoreExtractor(lore, livingEntity);
+            }
 
-            // Check the first line for health, to see if we have a SimpleEgg.
+            // LEGACY: Check first line for health
             if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
@@ -159,11 +176,11 @@ public class ListenerEggEvents extends AbstractListener {
         ItemMeta meta = stack.getItemMeta();
         
         if (meta instanceof SpawnEggMeta) {
-            if (meta != null && meta.getLore() != null) {
-                if (meta.getLore().size() >= 1 && meta.getLore().get(0).startsWith("Health: ")) {
-                    event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
-                    event.setCancelled(true);
-                }
+            SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
+            
+            if (isSimpleEgg(spawnEggMeta)) {
+                event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+                event.setCancelled(true);
             }
         }
     }
@@ -172,5 +189,9 @@ public class ListenerEggEvents extends AbstractListener {
         if (plugin.getConfig().getBoolean("egg-refund")) {
             player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
         }
+    }
+    
+    private boolean isSimpleEgg(SpawnEggMeta meta) {
+        return meta.hasLore() && meta.getLore().get(0).equals("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
     }
 }
