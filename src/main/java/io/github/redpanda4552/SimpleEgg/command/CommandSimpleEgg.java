@@ -37,7 +37,7 @@ public class CommandSimpleEgg extends AbstractCommand {
     public CommandSimpleEgg(Main plugin, boolean eggRefund, String name, double amount) {
         super(plugin);
         this.eggRefund = eggRefund;
-        costStr = String.format("%s%s %s", Text.a, amount, name);
+        costStr = String.format("%s%s%s%s", Text.a, amount, name != null && !name.isEmpty() ? " " : "", name);
     }
     
     public CommandSimpleEgg(Main plugin, boolean eggRefund, String name, int amount) {
