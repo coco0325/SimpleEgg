@@ -99,13 +99,13 @@ public class Main extends JavaPlugin {
                 if (vaultEconomy != null) {
                     return true;
                 } else {
-                    log.warning("Failed to get provider for Vault economy; aborting Vault mode");
+                    log.warning("Failed to get Vault economy; aborting Vault mode.");
                 }
             } else {
-                log.warning("Failed to get registration for Vault economy; aborting Vault mode");
+                log.warning("No provider for Vault; is a Vault-compatible economy plugin present? Aborting Vault mode.");
             }
         } else {
-            log.info("Vault not present; aborting Vault mode");
+            log.info("Vault not present; aborting Vault mode.");
         }
         
         return false;
