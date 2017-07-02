@@ -70,7 +70,7 @@ public class Main extends JavaPlugin {
             log.info("Starting in Item mode");
             Material consumedItem;
             
-            // No failover for this so we need to try/catch
+            // getString() will work without fail; need to check manually
             try {
                 consumedItem = Material.valueOf(getConfig().getString("consumed-item"));
             } catch (IllegalArgumentException e) {
