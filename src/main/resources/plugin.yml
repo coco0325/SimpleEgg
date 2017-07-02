@@ -3,6 +3,7 @@ name: SimpleEgg
 version: 0.3.0
 author: bdubz4552
 description: A plugin to allow the capture and conversion of living entites to spawn eggs.
+softdepend: [Vault]
 
 commands:
     simpleegg:
