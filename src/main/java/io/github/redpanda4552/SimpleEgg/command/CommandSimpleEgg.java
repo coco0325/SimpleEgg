@@ -46,19 +46,19 @@ public class CommandSimpleEgg extends AbstractCommand {
         costStr = String.format("%s%s %s", Text.a, amount, name);
     }
     
-    // Note to future self. These aren't static fields, you can't make these
-    // Strings final. You almost did it once. Don't try again.
-    private String[] help = {
-        String.format("%s==SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
-        String.format("%sThe alias for %s/simpleegg %sis %s/se %s.", Text.b, Text.a, Text.b, Text.a, Text.b),
-        String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
-        String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
-        String.format("%sEach capture will cost %s%s%s.", Text.b, Text.a, costStr, Text.b)
-    };
+    private String[] getHelpDialogue() {
+        return new String[] {
+            String.format("%s==SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
+            String.format("%sThe alias for %s/simpleegg %sis %s/se %s.", Text.b, Text.a, Text.b, Text.a, Text.b),
+            String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
+            String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
+            String.format("%sEach capture will cost %s%s%s.", Text.b, Text.a, costStr, Text.b)
+        };
+    }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(help);
+        sender.sendMessage(getHelpDialogue());
         return true;
     }
 }
