@@ -84,7 +84,7 @@ public class Main extends JavaPlugin {
         
         captureManager = new CaptureManager(this);
         eggTracker = new EggTracker();
-        getServer().getPluginManager().registerEvents(new ListenerJoin(main, updateName), this);
+        getServer().getPluginManager().registerEvents(new ListenerJoin(main), this);
         getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
         runUpdateChecker();
     }
@@ -145,5 +145,9 @@ public class Main extends JavaPlugin {
     
     public Economy getVaultEconomy() {
         return vaultEconomy;
+    }
+    
+    public String getUpdateName() {
+        return updateName;
     }
 }

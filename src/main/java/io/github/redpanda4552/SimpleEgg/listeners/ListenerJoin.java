@@ -32,16 +32,15 @@ import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class ListenerJoin extends AbstractListener {
     
-    private String updateName;
     
-    public ListenerJoin(Main plugin, String updateName) {
+    public ListenerJoin(Main plugin) {
         super(plugin);
-        this.updateName = updateName;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        String updateName = plugin.getUpdateName();
         
         if (player.hasPermission("SimpleEgg.update-notify") && updateName != null) {
             player.sendMessage(String.format("%s%s is available at %s", Text.a, updateName, "https://dev.bukkit.org/projects/simpleegg"));
