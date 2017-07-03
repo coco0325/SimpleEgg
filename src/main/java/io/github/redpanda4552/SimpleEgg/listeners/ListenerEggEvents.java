@@ -25,6 +25,7 @@ package io.github.redpanda4552.SimpleEgg.listeners;
 
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
@@ -192,6 +193,6 @@ public class ListenerEggEvents extends AbstractListener {
     }
     
     private boolean isSimpleEgg(SpawnEggMeta meta) {
-        return meta.hasLore() && meta.getLore().get(0).equals("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
+        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).equals("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
     }
 }

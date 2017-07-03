@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -88,6 +89,7 @@ public class LoreExtractor {
         attributeMap = new HashMap<String, String>();
         
         for (String str : lore) {
+            str = ChatColor.stripColor(str);
             String[] strArr = str.split(": ");
             attributeMap.put(strArr[0], strArr[1]);
         }
