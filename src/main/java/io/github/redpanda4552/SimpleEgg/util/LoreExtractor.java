@@ -191,6 +191,12 @@ public class LoreExtractor {
     }
     
     private void villager(Villager villager) {
+        // For some reason, villagers inherit their mob type as a name, despite
+        // having no name set. Furthermore, the original call of this seems on
+        // the LivingEntity seems to have no effect, so we must do so to the
+        // Villager interface here. Perhaps Villager overrides the LivingEntity
+        // interface's method and we just don't know this?
+        villager.setCustomName(attributeMap.get("Custom Name"));
         villager.setProfession(Profession.valueOf(attributeMap.get("Profession")));
         villager.setRiches(Integer.parseInt(attributeMap.get("Riches")));
         ArrayList<MerchantRecipe> merchantRecipes = new ArrayList<MerchantRecipe>();
