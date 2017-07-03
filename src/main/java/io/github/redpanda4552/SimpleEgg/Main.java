@@ -26,6 +26,8 @@ package io.github.redpanda4552.SimpleEgg;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -94,11 +96,19 @@ public class Main extends JavaPlugin {
     }
     
     public void onDisable() {
-        
+        getServer().getScheduler().cancelTasks(this);
+        HandlerList.unregisterAll(this);
     }
     
-    public void reload() {
-        
+    /**
+     * Fires onDisable() and onEnable() to reload the plugin.
+     * @param player - The player who initiated the reload.
+     */
+    public void reload(CommandSender commandSender) {
+        reloadConfig();
+        onDisable();
+        onEnable();
+        commandSender.sendMessage(String.format("%sReload complete!", Text.tag));
     }
     
     private boolean setupEconomy() {
