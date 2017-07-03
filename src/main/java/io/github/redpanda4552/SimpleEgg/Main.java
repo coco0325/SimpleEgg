@@ -34,7 +34,6 @@ import io.github.redpanda4552.SimpleEgg.UpdateNotifier.UpdateResult;
 import io.github.redpanda4552.SimpleEgg.command.CommandSimpleEgg;
 import io.github.redpanda4552.SimpleEgg.listeners.ListenerEggEvents;
 import io.github.redpanda4552.SimpleEgg.listeners.ListenerJoin;
-import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 import net.milkbowl.vault.economy.Economy;
 

@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.redpanda4552.SimpleEgg.util;
+package io.github.redpanda4552.SimpleEgg;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
-import io.github.redpanda4552.SimpleEgg.Main;
 import net.milkbowl.vault.economy.Economy;
 
 public class ExpenseHandler {

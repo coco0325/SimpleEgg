@@ -43,8 +43,8 @@ import org.bukkit.inventory.meta.SpawnEggMeta;
 import io.github.redpanda4552.SimpleEgg.CaptureManager;
 import io.github.redpanda4552.SimpleEgg.EggTracker;
 import io.github.redpanda4552.SimpleEgg.EggTrackerEntry;
+import io.github.redpanda4552.SimpleEgg.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.Main;
-import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.util.LoreExtractor;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 

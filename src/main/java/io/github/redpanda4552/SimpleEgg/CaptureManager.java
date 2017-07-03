@@ -30,7 +30,6 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-import io.github.redpanda4552.SimpleEgg.util.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.util.LorePacker;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
