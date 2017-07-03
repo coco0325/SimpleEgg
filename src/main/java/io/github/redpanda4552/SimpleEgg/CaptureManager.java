@@ -94,6 +94,6 @@ public class CaptureManager {
         stack.setItemMeta(meta);
         livingEntity.getWorld().dropItem(livingEntity.getLocation(), stack);
         livingEntity.remove();
-        player.sendMessage(String.format("%s%s captured successfully!", Text.tag, livingEntity.getType().getEntityClass().getSimpleName()));
+        player.sendMessage(String.format("%s%s%s%s captured successfully!", Text.tag, Text.a, livingEntity.getType().getEntityClass().getSimpleName(), Text.b));
     }
 }
