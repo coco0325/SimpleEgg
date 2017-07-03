@@ -48,7 +48,7 @@ public class CommandSimpleEgg extends AbstractCommand {
     
     private String[] getHelpDialogue() {
         return new String[] {
-            String.format("%s==SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
+            String.format("%s== SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
             String.format("%sThe alias for %s/simpleegg %sis %s/se %s.", Text.b, Text.a, Text.b, Text.a, Text.b),
             String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
             String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
