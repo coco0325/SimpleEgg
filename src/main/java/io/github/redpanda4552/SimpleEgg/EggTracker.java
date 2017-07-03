@@ -76,6 +76,7 @@ public class EggTracker {
             this.entries.remove(entry);
             return true;
         }
+        
         return false;
     }
 }
