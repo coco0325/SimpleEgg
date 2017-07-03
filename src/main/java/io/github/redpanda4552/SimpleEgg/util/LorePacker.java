@@ -25,8 +25,10 @@ package io.github.redpanda4552.SimpleEgg.util;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
@@ -140,8 +142,26 @@ public class LorePacker {
             ret.add("Custom Name: " + livingEntity.getCustomName());
         }
         
-        ret.add("Health: " + livingEntity.getHealth() + "/" + livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-        ret.add("Speed: " + livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+        ret.add("Health: " + livingEntity.getHealth());
+        AttributeInstance attrInst;
+        
+        for (Attribute attribute : Attribute.values()) {
+            attrInst = livingEntity.getAttribute(attribute);
+            
+            if (attrInst != null) {
+                String attrName = attribute.toString();
+                String[] components = attrName.split("_");
+                String label = "";
+                
+                // Skip the first
+                for (int i = 1; i < components.length; i++) {
+                    label += StringUtils.capitalize(components[i].toLowerCase()) + " ";
+                }
+                
+                ret.add(label.trim() + ": " + attrInst.getBaseValue());
+            }
+        }
+        
         return ret;
     }
     

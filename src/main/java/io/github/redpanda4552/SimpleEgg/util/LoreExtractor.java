@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
@@ -41,6 +43,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
+import org.bukkit.entity.Llama.Color;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
@@ -50,11 +53,10 @@ import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
-import org.bukkit.entity.Llama.Color;
-import org.bukkit.entity.Villager.Profession;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 
@@ -145,14 +147,29 @@ public class LoreExtractor {
         }
     }
     
-    // Entity specific methods
+    // Entity specific methods TODO Null check!
     private void livingEntity(LivingEntity livingEntity) {
         livingEntity.setCustomName(attributeMap.get("Custom Name"));
-        String[] healthStrings = attributeMap.get("Health").split("/");
-        livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Double.parseDouble(healthStrings[1]));
-        livingEntity.setHealth(Double.parseDouble(healthStrings[0]));
-        double speed = Double.parseDouble(attributeMap.get("Speed"));
-        livingEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
+        livingEntity.setHealth(Double.parseDouble(attributeMap.get("Health")));
+        AttributeInstance attrInst;
+        
+        for (Attribute attribute : Attribute.values()) {
+            attrInst = livingEntity.getAttribute(attribute);
+            
+            if (attrInst != null) {
+                String attrName = attribute.toString();
+                String[] components = attrName.split("_");
+                String label = "";
+                
+                // Skip the first
+                for (int i = 1; i < components.length; i++) {
+                    label += StringUtils.capitalize(components[i].toLowerCase()) + " ";
+                }
+                
+                double value = Double.parseDouble(attributeMap.get(label.trim()));
+                attrInst.setBaseValue(value);
+            }
+        }
     }
     
     private void ageable(Ageable ageable) {
