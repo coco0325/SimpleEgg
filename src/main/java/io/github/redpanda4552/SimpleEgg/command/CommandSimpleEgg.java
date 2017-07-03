@@ -58,6 +58,12 @@ public class CommandSimpleEgg extends AbstractCommand {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length > 0) {
+            if (args[0].equalsIgnoreCase("reload")) {
+                plugin.reload();
+            }
+        }
+        
         sender.sendMessage(getHelpDialogue());
         return true;
     }

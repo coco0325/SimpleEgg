@@ -49,10 +49,15 @@ public class Main extends JavaPlugin {
     private String updateName = null;
     
     // For the update notifier only
-    private final Main main = this;
+    private static Main main;
+    
+    public static Main getSelf() {
+        return main;
+    }
     
     public void onEnable() {
         log = getLogger();
+        main = this;
         saveDefaultConfig();
         
         // Configuration settings (that have failsafes)
@@ -87,6 +92,14 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ListenerJoin(main), this);
         getServer().getPluginManager().registerEvents(new ListenerEggEvents(this), this);
         runUpdateChecker();
+    }
+    
+    public void onDisable() {
+        
+    }
+    
+    public void reload() {
+        
     }
     
     private boolean setupEconomy() {
