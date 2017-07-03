@@ -1,6 +1,9 @@
 # Automatically check for updates. Only notifies, no automatic download.
 update-checks: true
 
+# Show or hide the [SimpleEgg] tag on plugin messages.
+show-tag: true
+
 # Exchange system for mob captures. Set to 'item' to utilize item settings, set
 # to 'vault' to use vault settings. Vault settings require the Vault plugin to
 # be installed and running.
