@@ -361,6 +361,7 @@ public class LorePacker {
     private ArrayList<String> snowman(Snowman snowman) {
         ArrayList<String> ret = new ArrayList<String>();
         
+        // Is always returning true, maybe Spigot doesn't implement to API spec?
         if (snowman.isDerp()) {
             ret.add("Derp: Yes");
         } else {
