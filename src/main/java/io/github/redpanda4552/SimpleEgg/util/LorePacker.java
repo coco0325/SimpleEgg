@@ -33,7 +33,6 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Evoker;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
@@ -45,6 +44,7 @@ import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Spellcaster;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
@@ -121,8 +121,8 @@ public class LorePacker {
             } else if (livingEntity instanceof ZombieVillager) {
                 lore.addAll(zombieVillager((ZombieVillager) livingEntity));
             }
-        } else if (livingEntity instanceof Evoker) {
-            lore.addAll(evoker((Evoker) livingEntity));
+        } else if (livingEntity instanceof Spellcaster) {
+            lore.addAll(spellCaster((Spellcaster) livingEntity));
         } else if (livingEntity instanceof IronGolem) {
             lore.addAll(ironGolem((IronGolem) livingEntity));
         } else if (livingEntity instanceof Snowman) {
@@ -339,10 +339,9 @@ public class LorePacker {
         return ret;
     }
     
-    @SuppressWarnings("deprecation")
-    private ArrayList<String> evoker(Evoker evoker) {
+    private ArrayList<String> spellCaster(Spellcaster spellCaster) {
         ArrayList<String> ret = new ArrayList<String>();
-        ret.add("Active Spell: " + evoker.getCurrentSpell().toString());
+        ret.add("Active Spell: " + spellCaster.getSpell().toString());
         return ret;
     }
     

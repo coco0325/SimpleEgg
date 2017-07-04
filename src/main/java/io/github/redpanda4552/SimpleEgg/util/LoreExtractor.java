@@ -38,8 +38,6 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Evoker;
-import org.bukkit.entity.Evoker.Spell;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
@@ -52,6 +50,8 @@ import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Spellcaster;
+import org.bukkit.entity.Spellcaster.Spell;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
@@ -61,7 +61,6 @@ import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 
-@SuppressWarnings("deprecation")
 public class LoreExtractor {
 
     private HashMap<String, String> attributeMap;
@@ -140,8 +139,8 @@ public class LoreExtractor {
             } else if (livingEntity instanceof ZombieVillager) {
                 zombieVillager((ZombieVillager) livingEntity);
             }
-        } else if (livingEntity instanceof Evoker) {
-            evoker((Evoker) livingEntity);
+        } else if (livingEntity instanceof Spellcaster) {
+            spellCaster((Spellcaster) livingEntity);
         } else if (livingEntity instanceof IronGolem) {
             ironGolem((IronGolem) livingEntity);
         } else if (livingEntity instanceof Snowman) {
@@ -302,8 +301,8 @@ public class LoreExtractor {
         zombieVillager.setVillagerProfession(Profession.valueOf(attributeMap.get("Profession")));
     }
     
-    private void evoker(Evoker evoker) {
-        evoker.setCurrentSpell(Spell.valueOf(attributeMap.get("Active Spell")));
+    private void spellCaster(Spellcaster spellCaster) {
+        spellCaster.setSpell(Spell.valueOf(attributeMap.get("Active Spell")));
     }
     
     private void ironGolem(IronGolem ironGolem) {
