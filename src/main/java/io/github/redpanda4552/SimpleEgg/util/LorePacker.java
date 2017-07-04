@@ -131,6 +131,11 @@ public class LorePacker {
     }
     
     public ArrayList<String> getLore() {
+        for (int i = 0; i < lore.size(); i++) {
+            String[] halves = lore.get(i).split(":");
+            lore.set(i, String.format("%s%s:%s%s", Text.a, halves[0], Text.b, halves[1]));
+        }
+        
         return lore;
     }
     

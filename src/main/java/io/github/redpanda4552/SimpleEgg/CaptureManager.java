@@ -83,7 +83,7 @@ public class CaptureManager {
         ItemStack stack = new ItemStack(Material.MONSTER_EGG);
         SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
         meta.setSpawnedType(livingEntity.getType());
-        String name = livingEntity.getType().getEntityClass().getSimpleName();
+        String name = Text.a + livingEntity.getType().getEntityClass().getSimpleName();
         
         if (livingEntity.getCustomName() != null) {
             name += ": " + livingEntity.getCustomName();
