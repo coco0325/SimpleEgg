@@ -129,7 +129,7 @@ public class ListenerEggEvents extends AbstractListener {
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
             
             // Use a more specific identifier line, instead of the health line
-            if (isSimpleEgg(meta)) {
+            if (isVersionCurrent(meta)) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
                 
@@ -143,10 +143,9 @@ public class ListenerEggEvents extends AbstractListener {
                 // will have a custom name field in the lore body, if present,
                 // and the display name is now just for show and not saved data.
                 new LoreExtractor(lore, livingEntity);
-            }
-
-            // LEGACY: Check first line for health
-            if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
+            } else if (isSimpleEgg(meta)) {
+                
+            } else if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
                 
@@ -192,7 +191,26 @@ public class ListenerEggEvents extends AbstractListener {
         }
     }
     
+    /**
+     * Check if an egg's identifier line exists, regardless of version.
+     * @return True if it has an identifier of any version, false otherwise.
+     */
     private boolean isSimpleEgg(SpawnEggMeta meta) {
-        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).equals("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
+        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
+    }
+    
+    /**
+     * Check if an egg's identifier line exists and the version on it matches
+     * the current plugin version.
+     * @return True if the egg is current, false otherwise.
+     */
+    private boolean isVersionCurrent(SpawnEggMeta meta) {
+        if (isSimpleEgg(meta)) {
+            if (ChatColor.stripColor(meta.getLore().get(0)).endsWith(Main.getSelf().getDescription().getVersion())) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

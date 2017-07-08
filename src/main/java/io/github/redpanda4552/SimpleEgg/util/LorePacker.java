@@ -54,6 +54,8 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.MerchantRecipe;
 
+import io.github.redpanda4552.SimpleEgg.Main;
+
 public class LorePacker {
 
     private ArrayList<String> lore;
@@ -76,7 +78,7 @@ public class LorePacker {
         
         lore = new ArrayList<String>();
         // This needs to always be on top of an egg's lore
-        lore.add("Identifier: SimpleEgg." + livingEntity.getType().getEntityClass().getSimpleName());
+        lore.add("Identifier: SimpleEgg." + livingEntity.getType().getEntityClass().getSimpleName() + "." + Main.getSelf().getDescription().getVersion());
         lore.addAll(livingEntity(livingEntity));
         
         if (livingEntity instanceof Ageable) {
