@@ -38,10 +38,12 @@ import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spellcaster;
@@ -103,10 +105,16 @@ public class LorePacker {
                             lore.addAll(llama((Llama) livingEntity));
                         }
                     }
-                } else if (livingEntity instanceof Wolf) {
-                    lore.addAll(wolf((Wolf) livingEntity));
-                } else if (livingEntity instanceof Ocelot) {
-                    lore.addAll(ocelot((Ocelot) livingEntity));
+                } else if (livingEntity instanceof Sittable) {
+                    lore.addAll(sittable((Sittable) livingEntity));
+                    
+                    if (livingEntity instanceof Wolf) {
+                        lore.addAll(wolf((Wolf) livingEntity));
+                    } else if (livingEntity instanceof Ocelot) {
+                        lore.addAll(ocelot((Ocelot) livingEntity));
+                    } else if (livingEntity instanceof Parrot) {
+                        lore.addAll(parrot((Parrot) livingEntity));
+                    }
                 }
             }
         } else if (livingEntity instanceof Slime) {
@@ -268,6 +276,18 @@ public class LorePacker {
         return ret;
     }
     
+    private ArrayList<String> sittable(Sittable sittable) {
+        ArrayList<String> ret = new ArrayList<String>();
+        
+        if (sittable.isSitting()) {
+            ret.add("Sitting: Yes");
+        } else {
+            ret.add("Sitting: No");
+        }
+        
+        return ret;
+    }
+    
     private ArrayList<String> wolf(Wolf wolf) {
         ArrayList<String> ret = new ArrayList<String>();
 
@@ -287,13 +307,12 @@ public class LorePacker {
     private ArrayList<String> ocelot(Ocelot ocelot) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Type: " + ocelot.getCatType());
-        
-        if (ocelot.isSitting()) {
-            ret.add("Sitting: Yes");
-        } else {
-            ret.add("Sitting: No");
-        }
-        
+        return ret;
+    }
+    
+    private ArrayList<String> parrot(Parrot parrot) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Variant: " + parrot.getVariant().toString());
         return ret;
     }
     

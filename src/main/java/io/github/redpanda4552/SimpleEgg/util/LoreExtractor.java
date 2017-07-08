@@ -44,10 +44,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Llama.Color;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spellcaster;
@@ -121,10 +124,16 @@ public class LoreExtractor {
                             llama((Llama) livingEntity);
                         }
                     }
-                } else if (livingEntity instanceof Wolf) {
-                    wolf((Wolf) livingEntity);
-                } else if (livingEntity instanceof Ocelot) {
-                    ocelot((Ocelot) livingEntity);
+                } else if (livingEntity instanceof Sittable) {
+                    sittable((Sittable) livingEntity);
+                    
+                    if (livingEntity instanceof Wolf) {
+                        wolf((Wolf) livingEntity);
+                    } else if (livingEntity instanceof Ocelot) {
+                        ocelot((Ocelot) livingEntity);
+                    } else if (livingEntity instanceof Parrot) {
+                        parrot((Parrot) livingEntity);
+                    }
                 }
             }
         } else if (livingEntity instanceof Slime) {
@@ -148,7 +157,7 @@ public class LoreExtractor {
         }
     }
     
-    // Entity specific methods TODO Null check!
+    // Entity specific methods
     private void livingEntity(LivingEntity livingEntity) {
         livingEntity.setCustomName(attributeMap.get("Custom Name"));
         livingEntity.setHealth(Double.parseDouble(attributeMap.get("Health")));
@@ -256,6 +265,14 @@ public class LoreExtractor {
         }
     }
     
+    private void sittable(Sittable sittable) {
+        if (attributeMap.get("Sitting").equals("Yes")) {
+            sittable.setSitting(true);
+        } else {
+            sittable.setSitting(false);
+        }
+    }
+    
     private void wolf(Wolf wolf) {
         if (attributeMap.get("Angry").equals("Yes")) {
             wolf.setAngry(true);
@@ -270,7 +287,11 @@ public class LoreExtractor {
     
     private void ocelot(Ocelot ocelot) {
         ocelot.setCatType(Ocelot.Type.valueOf(attributeMap.get("Type")));
-        ocelot.setSitting(Boolean.parseBoolean(attributeMap.get("Sitting")));
+    }
+    
+    private void parrot(Parrot parrot) {
+        parrot.setVariant(Variant.valueOf(attributeMap.get("Variant")));
+        
     }
     
     private void slime(Slime slime) {
