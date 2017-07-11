@@ -228,7 +228,7 @@ public class LoreExtractor {
     }
     
     private void abstractHorse(AbstractHorse abstractHorse) {
-        abstractHorse.setJumpStrength(Double.parseDouble(attributeMap.get("Jump Power")));
+        
     }
     
     private void horse(Horse horse) {

@@ -232,7 +232,6 @@ public class LorePacker {
     
     private ArrayList<String> abstractHorse(AbstractHorse abstractHorse) {
         ArrayList<String> ret = new ArrayList<String>();
-        ret.add("Jump Power: " + abstractHorse.getJumpStrength());
         return ret;
     }
     
