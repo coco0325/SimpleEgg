@@ -232,7 +232,7 @@ public class LoreExtractor {
     }
     
     private void horse(Horse horse) {
-        if (attributeMap.get("Armor").equals("Iron")) {
+        if (attributeMap.get("Horse Armor").equals("Iron")) {
             horse.getInventory().setArmor(new ItemStack(Material.IRON_BARDING, 1));
         } else if (attributeMap.get("Armor").equals("Gold")) {
             horse.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING, 1));

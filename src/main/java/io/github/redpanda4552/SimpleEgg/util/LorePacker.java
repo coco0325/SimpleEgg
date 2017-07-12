@@ -239,13 +239,13 @@ public class LorePacker {
         ArrayList<String> ret = new ArrayList<String>();
         
         if (horse.getInventory().getArmor() == null) {
-            ret.add("Armor: None");
+            ret.add("Horse Armor: None");
         } else if (horse.getInventory().getArmor().getType() == Material.IRON_BARDING) {
-            ret.add("Armor: Iron");
+            ret.add("Horse Armor: Iron");
         } else if (horse.getInventory().getArmor().getType() == Material.GOLD_BARDING) {
-            ret.add("Armor: Gold");
+            ret.add("Horse Armor: Gold");
         } else if (horse.getInventory().getArmor().getType() == Material.DIAMOND_BARDING) {
-            ret.add("Armor: Diamond");
+            ret.add("Horse Armor: Diamond");
         }
         
         if (horse.getInventory().getSaddle() != null) {
