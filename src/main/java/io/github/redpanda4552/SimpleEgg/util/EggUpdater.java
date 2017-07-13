@@ -30,7 +30,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 
 /**
- * A modified version of the LoreExtractor to serve as a compatibility layer.
+ * A compatibility layer to be used before the LoreExtractor on old eggs.
  * Any harsh changes to how mob data is stored in eggs will be corrected by this
  * prior to full application by the LoreExtractor.
  * 
