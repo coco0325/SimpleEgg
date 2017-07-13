@@ -160,7 +160,6 @@ public class LoreExtractor {
     // Entity specific methods
     private void livingEntity(LivingEntity livingEntity) {
         livingEntity.setCustomName(attributeMap.get("Custom Name"));
-        livingEntity.setHealth(Double.parseDouble(attributeMap.get("Health")));
         AttributeInstance attrInst;
         
         for (Attribute attribute : Attribute.values()) {
@@ -180,6 +179,9 @@ public class LoreExtractor {
                 attrInst.setBaseValue(value);
             }
         }
+        
+        // Needs to happen after attributes, so health doesn't exceed the max
+        livingEntity.setHealth(Double.parseDouble(attributeMap.get("Health")));
     }
     
     private void ageable(Ageable ageable) {
