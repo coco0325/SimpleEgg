@@ -46,6 +46,7 @@ import io.github.redpanda4552.SimpleEgg.EggTracker;
 import io.github.redpanda4552.SimpleEgg.EggTrackerEntry;
 import io.github.redpanda4552.SimpleEgg.ExpenseHandler;
 import io.github.redpanda4552.SimpleEgg.Main;
+import io.github.redpanda4552.SimpleEgg.util.EggUpdater;
 import io.github.redpanda4552.SimpleEgg.util.LoreExtractor;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
@@ -144,7 +145,17 @@ public class ListenerEggEvents extends AbstractListener {
                 // and the display name is now just for show and not saved data.
                 new LoreExtractor(lore, livingEntity);
             } else if (isSimpleEgg(meta)) {
+                event.setCancelled(true);
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
                 
+                if (stack.getAmount() > 1) {
+                    stack.setAmount(stack.getAmount() - 1);
+                } else {
+                    event.getPlayer().getInventory().remove(stack);
+                }
+                
+                ArrayList<String> updatedLore = new EggUpdater(lore, livingEntity).getNewLore();
+                new LoreExtractor(updatedLore, livingEntity);
             } else if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
@@ -165,7 +176,8 @@ public class ListenerEggEvents extends AbstractListener {
                     livingEntity.setCustomName(customName);
                 }
                 
-                new LoreExtractor(lore, livingEntity);
+                ArrayList<String> updatedLore = new EggUpdater(lore, livingEntity).getNewLore();
+                new LoreExtractor(updatedLore, livingEntity);
             }
         }
     }
