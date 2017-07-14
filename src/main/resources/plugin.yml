@@ -27,6 +27,8 @@ permissions:
     #Admin
     SimpleEgg.update-notify:
       description: Allow players to be notified of updates upon login
+    SimpleEgg.reload:
+      description: Allow players to reload the plugin
 
     #Passive
     SimpleEgg.passive:
