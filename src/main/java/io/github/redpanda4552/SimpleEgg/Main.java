@@ -146,7 +146,7 @@ public class Main extends JavaPlugin {
                     
                     if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
                         updateName = updater.getLatestName();
-                        log.info(String.format("%s%s is available at %s", Text.a, updateName, "https://dev.bukkit.org/projects/simpleegg"));
+                        log.info(String.format("%s is available at %s", updateName, "https://dev.bukkit.org/projects/simpleegg"));
                     }
                 }    
             }
