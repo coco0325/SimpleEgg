@@ -46,26 +46,43 @@ public class CommandSimpleEgg extends AbstractCommand {
         costStr = String.format("%s%s %s", Text.a, amount, name);
     }
     
-    private String[] getHelpDialogue() {
+    private String[] getMainDialogue() {
         return new String[] {
             String.format("%s== SimpleEgg v%s by pandubz ==", Text.a, plugin.getDescription().getVersion()),
             String.format("%sThe alias for %s/simpleegg %sis %s/se %s.", Text.b, Text.a, Text.b, Text.a, Text.b),
-            String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
-            String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
-            String.format("%sEach capture will cost %s%s%s.", Text.b, Text.a, costStr, Text.b)
+            String.format("%sSubcommands:", Text.b),
+            String.format("%s/se %sinfo %s- Basic plugin status and usage info", Text.b, Text.a, Text.b),
+            String.format("%s/se %sreload %s- Reload config and restart SimpleEgg", Text.b, Text.a, Text.b),
+        };
+    }
+    
+    private String[] getInfoDialogue() {
+        return new String[] {
+                String.format("%s== SimpleEgg Status and Usage Info ==", Text.a),
+                String.format("%sEgg Refunding %son failed captures is %s%s%s.", Text.a, Text.b, Text.a, eggRefund == true ? "Enabled" : "Disabled", Text.b),
+                String.format("%sTo capture a mob, throw an %sEgg %sat it.", Text.b, Text.a, Text.b),
+                String.format("%sEach capture will cost %s%s%s.", Text.b, Text.a, costStr, Text.b)
         };
     }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("SimpleEgg.reload")) {
-                plugin.reload(sender);
-                return true;
+            switch (args[0].toLowerCase()) {
+                case "info":
+                    sender.sendMessage(getInfoDialogue());
+                    return true;
+                case "reload":
+                    if (sender.hasPermission("SimpleEgg.reload")) {
+                        plugin.reload(sender);
+                        return true;
+                    }
+                    
+                    break;
             }
         }
         
-        sender.sendMessage(getHelpDialogue());
+        sender.sendMessage(getMainDialogue());
         return true;
     }
 }
