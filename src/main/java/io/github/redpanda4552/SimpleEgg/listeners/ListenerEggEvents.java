@@ -26,6 +26,7 @@ package io.github.redpanda4552.SimpleEgg.listeners;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
@@ -198,7 +199,7 @@ public class ListenerEggEvents extends AbstractListener {
     }
     
     private void refundEgg(Player player) {
-        if (plugin.getConfig().getBoolean("egg-refund")) {
+        if (plugin.getConfig().getBoolean("egg-refund") && player.getGameMode() != GameMode.CREATIVE) {
             player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
         }
     }
