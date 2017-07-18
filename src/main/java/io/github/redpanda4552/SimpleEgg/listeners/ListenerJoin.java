@@ -23,6 +23,7 @@
  */
 package io.github.redpanda4552.SimpleEgg.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -43,7 +44,8 @@ public class ListenerJoin extends AbstractListener {
         String updateName = plugin.getUpdateName();
         
         if (player.hasPermission("SimpleEgg.update-notify") && updateName != null) {
-            player.sendMessage(String.format("%s%s is available at %s", Text.a, updateName, "https://dev.bukkit.org/projects/simpleegg"));
+            player.sendMessage(String.format("%sAn update for SimpleEgg is available!", Text.tag));
+            player.sendMessage(String.format("%s%s%s%s is available at %s%s%s", Text.tag, Text.a, updateName, Text.b, Text.a, ChatColor.UNDERLINE, "https://dev.bukkit.org/projects/simpleegg"));
         }
     }
     
