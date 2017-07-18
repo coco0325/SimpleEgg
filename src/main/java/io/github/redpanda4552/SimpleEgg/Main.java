@@ -23,6 +23,7 @@
  */
 package io.github.redpanda4552.SimpleEgg;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -60,6 +61,22 @@ public class Main extends JavaPlugin {
         log = getLogger();
         main = this;
         saveDefaultConfig();
+        
+        // Config automagic updater
+        boolean save = false;
+        Set<String> configKeys = getConfig().getKeys(true);
+        Set<String> defaultKeys = getConfig().getDefaults().getKeys(true);
+        
+        for (String key : defaultKeys) {
+            if (!configKeys.contains(key)) {
+                getConfig().set(key, getConfig().getDefaults().get(key));
+                save = true;
+            }
+        }
+        
+        if (save) {
+            saveConfig();
+        }
         
         // Configuration settings (that have failsafes)
         String exchangeMode = getConfig().getString("exchange-mode");
