@@ -1,27 +1,9 @@
-# Automatically check for updates. Only notifies, no automatic download.
+# Config documentation is available at https://dev.bukkit.org/projects/simpleegg/pages/configuration
 update-checks: true
-
-# Show or hide the [SimpleEgg] tag on plugin messages.
 show-tag: true
-
-# Exchange system for mob captures. Set to 'item' to utilize item settings, set
-# to 'vault' to use vault settings. Vault settings require the Vault plugin to
-# be installed and running.
 exchange-mode: item
-
-# Item consumed when a player catches a mob. Must be a Bukkit Material type.
-# Types: <https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html>
 consumed-item: DIAMOND
-
-# The name of the above material type that will show in the /simpleegg command
 consumed-item-name: Diamonds
-
-# Number of items required per capture. Set to 0 to require no items.
 consumed-item-amount: 5
-
-# The amount of currency to charge per mob capture.
 vault-cost: 100
-
-# Refund egg if capture requirements not met.
 egg-refund: true
-
