@@ -82,6 +82,7 @@ permissions:
             SimpleEgg.llama: true
             SimpleEgg.wolf: true
             SimpleEgg.ocelot: true
+            SimpleEgg.parrot: true
     SimpleEgg.horse:
         description: Allows capturing of this mob
     SimpleEgg.donkey:
@@ -97,6 +98,8 @@ permissions:
     SimpleEgg.wolf:
         description: Allows capturing of this mob
     SimpleEgg.ocelot:
+        description: Allows capturing of this mob
+    SimpleEgg.parrot:
         description: Allows capturing of this mob
 
     #Monsters
