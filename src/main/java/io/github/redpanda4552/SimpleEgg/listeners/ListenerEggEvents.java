@@ -134,12 +134,7 @@ public class ListenerEggEvents extends AbstractListener {
             if (isVersionCurrent(meta)) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
-                
-                if (stack.getAmount() > 1) {
-                    stack.setAmount(stack.getAmount() - 1);
-                } else {
-                    event.getPlayer().getInventory().remove(stack);
-                }
+                consumeSimpleEgg(stack);
                 
                 // The legacy code for the display name is arbitrary. New eggs
                 // will have a custom name field in the lore body, if present,
@@ -148,24 +143,14 @@ public class ListenerEggEvents extends AbstractListener {
             } else if (isSimpleEgg(meta)) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
-                
-                if (stack.getAmount() > 1) {
-                    stack.setAmount(stack.getAmount() - 1);
-                } else {
-                    event.getPlayer().getInventory().remove(stack);
-                }
+                consumeSimpleEgg(stack);
                 
                 ArrayList<String> updatedLore = new EggUpdater(lore, livingEntity).getNewLore();
                 new LoreExtractor(updatedLore, livingEntity);
             } else if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
                 event.setCancelled(true);
                 LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
-                
-                if (stack.getAmount() > 1) {
-                    stack.setAmount(stack.getAmount() - 1);
-                } else {
-                    event.getPlayer().getInventory().remove(stack);
-                }
+                consumeSimpleEgg(stack);
                 
                 // If the ItemStack name contains ": ", that means the mob has a custom name.
                 // Below we will use ": " as a delimeter to split and remove the preceding mob type,
@@ -202,6 +187,10 @@ public class ListenerEggEvents extends AbstractListener {
         if (plugin.getConfig().getBoolean("egg-refund") && player.getGameMode() != GameMode.CREATIVE) {
             player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.EGG, 1));
         }
+    }
+    
+    private void consumeSimpleEgg(ItemStack stack) {
+        stack.setAmount(stack.getAmount() - 1);
     }
     
     /**
