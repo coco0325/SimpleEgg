@@ -30,6 +30,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -133,7 +134,7 @@ public class ListenerEggEvents extends AbstractListener {
             // Use a more specific identifier line, instead of the health line
             if (isVersionCurrent(meta)) {
                 event.setCancelled(true);
-                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), EntityType.valueOf(stack.getType().toString().replace("_SPAWN_EGG", "")));
                 consumeSimpleEgg(stack);
                 
                 // The legacy code for the display name is arbitrary. New eggs
@@ -142,14 +143,14 @@ public class ListenerEggEvents extends AbstractListener {
                 new LoreExtractor(lore, livingEntity);
             } else if (isSimpleEgg(meta)) {
                 event.setCancelled(true);
-                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), EntityType.valueOf(stack.getType().toString().replace("_SPAWN_EGG", "")));
                 consumeSimpleEgg(stack);
                 
                 ArrayList<String> updatedLore = new EggUpdater(lore, livingEntity).getNewLore();
                 new LoreExtractor(updatedLore, livingEntity);
             } else if (meta.hasLore() && lore.get(0).startsWith("Health: ")) {
                 event.setCancelled(true);
-                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), meta.getSpawnedType());
+                LivingEntity livingEntity = (LivingEntity) event.getPlayer().getWorld().spawnEntity(new Location(event.getPlayer().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()), EntityType.valueOf(stack.getType().toString().replace("_SPAWN_EGG", "")));
                 consumeSimpleEgg(stack);
                 
                 // If the ItemStack name contains ": ", that means the mob has a custom name.
@@ -198,7 +199,7 @@ public class ListenerEggEvents extends AbstractListener {
      * @return True if it has an identifier of any version, false otherwise.
      */
     private boolean isSimpleEgg(SpawnEggMeta meta) {
-        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg." + meta.getSpawnedType().getEntityClass().getSimpleName());
+        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg.");
     }
     
     /**

@@ -80,9 +80,9 @@ public class CaptureManager {
         Player player = entry.getPlayer();
         LivingEntity livingEntity = entry.getEntity();
         expenseHandler.execute(player);
-        ItemStack stack = new ItemStack(Material.MONSTER_EGG);
+        ItemStack stack = new ItemStack(Material.getMaterial(livingEntity.getType().toString() + "_SPAWN_EGG"));
         SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
-        meta.setSpawnedType(livingEntity.getType());
+        //meta.setSpawnedType(livingEntity.getType());
         String name = Text.a + livingEntity.getType().getEntityClass().getSimpleName();
         
         if (livingEntity.getCustomName() != null) {
