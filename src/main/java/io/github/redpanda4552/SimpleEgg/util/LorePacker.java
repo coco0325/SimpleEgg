@@ -240,11 +240,11 @@ public class LorePacker {
         
         if (horse.getInventory().getArmor() == null) {
             ret.add("Horse Armor: None");
-        } else if (horse.getInventory().getArmor().getType() == Material.IRON_BARDING) {
+        } else if (horse.getInventory().getArmor().getType() == Material.IRON_HORSE_ARMOR) {
             ret.add("Horse Armor: Iron");
-        } else if (horse.getInventory().getArmor().getType() == Material.GOLD_BARDING) {
+        } else if (horse.getInventory().getArmor().getType() == Material.GOLDEN_HORSE_ARMOR) {
             ret.add("Horse Armor: Gold");
-        } else if (horse.getInventory().getArmor().getType() == Material.DIAMOND_BARDING) {
+        } else if (horse.getInventory().getArmor().getType() == Material.DIAMOND_HORSE_ARMOR) {
             ret.add("Horse Armor: Diamond");
         }
         
