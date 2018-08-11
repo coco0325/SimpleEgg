@@ -33,14 +33,17 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Sittable;
@@ -48,11 +51,13 @@ import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spellcaster;
 import org.bukkit.entity.Tameable;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.MerchantRecipe;
+import org.bukkit.material.Colorable;
 
 import io.github.redpanda4552.SimpleEgg.Main;
 
@@ -137,6 +142,18 @@ public class LorePacker {
             lore.addAll(ironGolem((IronGolem) livingEntity));
         } else if (livingEntity instanceof Snowman) {
             lore.addAll(snowman((Snowman) livingEntity));
+        } else if (livingEntity instanceof Enderman) {
+            lore.addAll(enderman((Enderman) livingEntity));
+        } else if (livingEntity instanceof Phantom) {
+            lore.addAll(phantom((Phantom) livingEntity));
+        } else if (livingEntity instanceof PufferFish) {
+            lore.addAll(pufferFish((PufferFish) livingEntity));
+        } else if (livingEntity instanceof TropicalFish) {
+            lore.addAll(tropicalFish((TropicalFish) livingEntity));
+        }
+        
+        if (livingEntity instanceof Colorable) {
+            lore.addAll(colorable((Colorable) livingEntity));
         }
     }
     
@@ -188,7 +205,7 @@ public class LorePacker {
     
     private ArrayList<String> sheep(Sheep sheep) {
         ArrayList<String> ret = new ArrayList<String>();
-        ret.add("Color: " + sheep.getColor());
+        ret.add("Sheared: " + sheep.isSheared());
         return ret;
     }
     
@@ -207,6 +224,7 @@ public class LorePacker {
     private ArrayList<String> villager(Villager villager) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Profession: " + villager.getProfession().toString());
+        ret.add("Career: " + villager.getCareer().toString());
         ret.add("Riches: " + villager.getRiches());
         int i = 1;
         
@@ -232,6 +250,10 @@ public class LorePacker {
     
     private ArrayList<String> abstractHorse(AbstractHorse abstractHorse) {
         ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Domestication: " + abstractHorse.getDomestication());
+        // getJumpStrength(): Don't do this here, there is, of course, an 
+        // Attribute for it, which gets swept up automatically.
+        ret.add("Max Domestication: " + abstractHorse.getMaxDomestication());
         return ret;
     }
     
@@ -332,6 +354,9 @@ public class LorePacker {
             ret.add("Charged: No");
         }
         
+        ret.add("Explosion Radius: " + creeper.getExplosionRadius());
+        ret.add("Max Fuse Ticks: "+ creeper.getMaxFuseTicks());
+        
         return ret;
     }
     
@@ -387,6 +412,40 @@ public class LorePacker {
             ret.add("Derp: No");
         }
         
+        return ret;
+    }
+    
+    // You may argue this is pointless. And I may agree with you. But, maybe
+    // someone modded their Endermen to not teleport, I won't assume.
+    private ArrayList<String> enderman(Enderman enderman) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Carried Block: " + enderman.getCarriedBlock().getAsString());
+        return ret;
+    }
+    
+    private ArrayList<String> phantom(Phantom phantom) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Size: " + phantom.getSize());
+        return ret;
+    }
+    
+    private ArrayList<String> pufferFish(PufferFish pufferFish) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Puff State: " + pufferFish.getPuffState());
+        return ret;
+    }
+    
+    private ArrayList<String> colorable(Colorable colorable) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Color: " + colorable.getColor().toString());
+        return ret;
+    }
+    
+    private ArrayList<String> tropicalFish(TropicalFish tropicalFish) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Body Color: " + tropicalFish.getBodyColor().toString());
+        ret.add("Pattern: " + tropicalFish.getPattern().toString());
+        ret.add("Pattern Color: " + tropicalFish.getPatternColor().toString());
         return ret;
     }
 }

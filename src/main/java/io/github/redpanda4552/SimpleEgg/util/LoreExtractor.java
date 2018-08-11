@@ -38,6 +38,7 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
@@ -46,8 +47,10 @@ import org.bukkit.entity.Llama.Color;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Parrot.Variant;
+import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Sittable;
@@ -55,14 +58,20 @@ import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spellcaster;
 import org.bukkit.entity.Spellcaster.Spell;
+import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.entity.Tameable;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Villager.Career;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
+import org.bukkit.material.Colorable;
+
+import io.github.redpanda4552.SimpleEgg.Main;
 
 public class LoreExtractor {
 
@@ -154,6 +163,18 @@ public class LoreExtractor {
             ironGolem((IronGolem) livingEntity);
         } else if (livingEntity instanceof Snowman) {
             snowman((Snowman) livingEntity);
+        } else if (livingEntity instanceof Enderman) {
+            enderman((Enderman) livingEntity);
+        } else if (livingEntity instanceof Phantom) {
+            phantom((Phantom) livingEntity);
+        } else if (livingEntity instanceof PufferFish) {
+            pufferFish((PufferFish) livingEntity);
+        } else if (livingEntity instanceof TropicalFish) {
+            tropicalFish((TropicalFish) livingEntity);
+        }
+        
+        if (livingEntity instanceof Colorable) {
+            colorable((Colorable) livingEntity);
         }
     }
     
@@ -189,7 +210,10 @@ public class LoreExtractor {
     }
     
     private void sheep(Sheep sheep) {
-        sheep.setColor(DyeColor.valueOf(attributeMap.get("Color")));
+        String sheared = attributeMap.get("Sheared");
+        
+        if (sheared != null)
+            sheep.setSheared(Boolean.parseBoolean(sheared));
     }
     
     private void pig(Pig pig) {
@@ -208,6 +232,12 @@ public class LoreExtractor {
         // interface's method and we just don't know this?
         villager.setCustomName(attributeMap.get("Custom Name"));
         villager.setProfession(Profession.valueOf(attributeMap.get("Profession")));
+        
+        String career = attributeMap.get("Career");
+        
+        if (career != null)
+            villager.setCareer(Career.valueOf(career));
+        
         villager.setRiches(Integer.parseInt(attributeMap.get("Riches")));
         ArrayList<MerchantRecipe> merchantRecipes = new ArrayList<MerchantRecipe>();
         
@@ -230,7 +260,15 @@ public class LoreExtractor {
     }
     
     private void abstractHorse(AbstractHorse abstractHorse) {
+        String domestication = attributeMap.get("Domestication");
         
+        if (domestication != null)
+            abstractHorse.setDomestication(Integer.parseInt(domestication));
+        
+        String maxDomestication = attributeMap.get("Max Domestication");
+        
+        if (maxDomestication != null)
+            abstractHorse.setMaxDomestication(Integer.parseInt(maxDomestication));
     }
     
     private void horse(Horse horse) {
@@ -306,6 +344,16 @@ public class LoreExtractor {
         } else {
             creeper.setPowered(false);
         }
+        
+        String explosionRadius = attributeMap.get("Explosion Radius");
+        
+        if (explosionRadius != null)
+            creeper.setExplosionRadius(Integer.parseInt(explosionRadius));
+        
+        String maxFuseTicks = attributeMap.get("Max Fuse Ticks");
+        
+        if (maxFuseTicks != null)
+            creeper.setMaxFuseTicks(Integer.parseInt(maxFuseTicks));
     }
     
     private void zombie(Zombie zombie) {
@@ -346,5 +394,50 @@ public class LoreExtractor {
         } else {
             snowman.setDerp(false);
         }
+    }
+    
+    private void enderman(Enderman enderman) {
+        String blockData = attributeMap.get("Carried Block");
+        
+        if (blockData != null)
+            enderman.setCarriedBlock(Main.getSelf().getServer().createBlockData(blockData));
+    }
+    
+    private void phantom(Phantom phantom) {
+        String size = attributeMap.get("Size");
+        
+        if (size != null)
+            phantom.setSize(Integer.parseInt(size));
+    }
+    
+    private void pufferFish(PufferFish pufferFish) {
+        String puffState = attributeMap.get("Puff State");
+        
+        if (puffState != null)
+            pufferFish.setPuffState(Integer.parseInt(puffState));
+    }
+    
+    private void colorable(Colorable colorable) {
+        String color = attributeMap.get("Color");
+        
+        if (color != null)
+            colorable.setColor(DyeColor.valueOf(color));
+    }
+    
+    private void tropicalFish(TropicalFish tropicalFish) {
+        String bodyColor = attributeMap.get("Body Color");
+        
+        if (bodyColor != null)
+            tropicalFish.setBodyColor(DyeColor.valueOf(bodyColor));
+        
+        String pattern = attributeMap.get("Pattern");
+        
+        if (pattern != null)
+            tropicalFish.setPattern(Pattern.valueOf(pattern));
+        
+        String patternColor = attributeMap.get("Pattern Color");
+        
+        if (patternColor != null)
+            tropicalFish.setPatternColor(DyeColor.valueOf(patternColor));
     }
 }
