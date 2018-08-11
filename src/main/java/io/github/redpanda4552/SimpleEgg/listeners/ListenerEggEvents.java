@@ -127,8 +127,15 @@ public class ListenerEggEvents extends AbstractListener {
     public void eggUse(PlayerInteractEvent event) {
         ItemStack stack = event.getItem();
         
-        if (event.getItem() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && stack.getType().toString().endsWith("SPAWN_EGG")) {
-            ItemMeta meta = stack.getItemMeta();
+        if (stack == null)
+            return;
+        
+        ItemMeta meta = stack.getItemMeta();
+        
+        if (meta == null)
+            return;
+
+        if (event.getItem() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
             
             // Use a more specific identifier line, instead of the health line
@@ -195,7 +202,7 @@ public class ListenerEggEvents extends AbstractListener {
      * @return True if it has an identifier of any version, false otherwise.
      */
     private boolean isSimpleEgg(ItemMeta meta) {
-        return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg.");
+        return meta != null && meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg.");
     }
     
     /**
