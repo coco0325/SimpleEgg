@@ -41,7 +41,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SpawnEggMeta;
 
 import io.github.redpanda4552.SimpleEgg.CaptureManager;
 import io.github.redpanda4552.SimpleEgg.EggTracker;
@@ -126,9 +125,10 @@ public class ListenerEggEvents extends AbstractListener {
     
     @EventHandler
     public void eggUse(PlayerInteractEvent event) {
-        if (event.getItem() != null && event.getItem().getItemMeta() instanceof SpawnEggMeta && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack stack = event.getItem();
-            SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
+        ItemStack stack = event.getItem();
+        
+        if (event.getItem() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && stack.getType().toString().endsWith("SPAWN_EGG")) {
+            ItemMeta meta = stack.getItemMeta();
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
             
             // Use a more specific identifier line, instead of the health line
@@ -174,13 +174,9 @@ public class ListenerEggEvents extends AbstractListener {
         ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
         ItemMeta meta = stack.getItemMeta();
         
-        if (meta instanceof SpawnEggMeta) {
-            SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
-            
-            if (isSimpleEgg(spawnEggMeta)) {
-                event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
-                event.setCancelled(true);
-            }
+        if (isSimpleEgg(meta)) {
+            event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
+            event.setCancelled(true);
         }
     }
     
@@ -198,7 +194,7 @@ public class ListenerEggEvents extends AbstractListener {
      * Check if an egg's identifier line exists, regardless of version.
      * @return True if it has an identifier of any version, false otherwise.
      */
-    private boolean isSimpleEgg(SpawnEggMeta meta) {
+    private boolean isSimpleEgg(ItemMeta meta) {
         return meta.hasLore() && ChatColor.stripColor(meta.getLore().get(0)).startsWith("Identifier: SimpleEgg.");
     }
     
@@ -207,7 +203,7 @@ public class ListenerEggEvents extends AbstractListener {
      * the current plugin version.
      * @return True if the egg is current, false otherwise.
      */
-    private boolean isVersionCurrent(SpawnEggMeta meta) {
+    private boolean isVersionCurrent(ItemMeta meta) {
         if (isSimpleEgg(meta)) {
             if (ChatColor.stripColor(meta.getLore().get(0)).endsWith(Main.getSelf().getDescription().getVersion())) {
                 return true;

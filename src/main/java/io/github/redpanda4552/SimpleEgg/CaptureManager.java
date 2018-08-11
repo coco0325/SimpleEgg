@@ -28,7 +28,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SpawnEggMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.redpanda4552.SimpleEgg.util.LorePacker;
 import io.github.redpanda4552.SimpleEgg.util.Text;
@@ -81,7 +81,7 @@ public class CaptureManager {
         LivingEntity livingEntity = entry.getEntity();
         expenseHandler.execute(player);
         ItemStack stack = new ItemStack(Material.getMaterial(livingEntity.getType().toString() + "_SPAWN_EGG"));
-        SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
+        ItemMeta meta = stack.getItemMeta();
         //meta.setSpawnedType(livingEntity.getType());
         String name = Text.a + livingEntity.getType().getEntityClass().getSimpleName();
         
