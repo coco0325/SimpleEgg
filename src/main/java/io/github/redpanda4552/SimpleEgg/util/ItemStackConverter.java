@@ -23,19 +23,43 @@
  */
 package io.github.redpanda4552.SimpleEgg.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemStackConverter {
     
-    @SuppressWarnings("deprecation")
     public static String toString(ItemStack itemStack) {
         String ret = new String(itemStack.getType().toString());
-        ret += "-" + itemStack.getAmount() + "-" + itemStack.getDurability() + "-" + itemStack.getData().getData();
-        return ret;
+        ret += "-" + itemStack.getAmount() + "-" + itemStack.getDurability();
+        
+        if (!itemStack.hasItemMeta())
+            return ret;
+        
+        if (itemStack.getItemMeta().hasDisplayName())
+            ret += "-" + itemStack.getItemMeta().getDisplayName();
+        
+        ret += "-";
+        
+        if (itemStack.getItemMeta() instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            
+            for (Enchantment enchantment : meta.getStoredEnchants().keySet())
+                ret += enchantment.getKey().getKey() + "/" + meta.getStoredEnchants().get(enchantment) + "-";
+        } else {
+            ItemMeta meta = itemStack.getItemMeta();
+            
+            for (Enchantment enchantment : meta.getEnchants().keySet())
+                ret += enchantment.getKey().getKey() + "/" + meta.getEnchantLevel(enchantment) + "-";
+        }
+        
+        return ret.substring(0, ret.lastIndexOf("-")); // Trim extra - off
     }
     
-    @SuppressWarnings("deprecation")
     public static ItemStack fromString(String string) {
         ItemStack ret = null;
         String[] itemStackParts = string.split("-");
@@ -44,8 +68,27 @@ public class ItemStackConverter {
             Material resultMaterial = Material.valueOf(itemStackParts[0]);
             int resultAmount = Integer.parseInt(itemStackParts[1]);
             short durability = Short.parseShort(itemStackParts[2]);
-            byte data = Byte.parseByte(itemStackParts[3]);
-            ret = new ItemStack(resultMaterial, resultAmount, durability, data);
+            ret = new ItemStack(resultMaterial, resultAmount, durability);
+            
+            if (resultMaterial == Material.ENCHANTED_BOOK) {
+                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) Bukkit.getItemFactory().getItemMeta(resultMaterial);
+                
+                for (int i = 3; i < itemStackParts.length; i++) {
+                    String[] enchantParts = itemStackParts[i].split("/");
+                    meta.addStoredEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
+                }
+                
+                ret.setItemMeta(meta);
+            } else {
+                ItemMeta meta = Bukkit.getItemFactory().getItemMeta(resultMaterial);
+                
+                for (int i = 3; i < itemStackParts.length; i++) {
+                    String[] enchantParts = itemStackParts[i].split("/");
+                    meta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
+                }
+                
+                ret.setItemMeta(meta);
+            }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Provided string cannot be converted to an ItemStack!", e);
         }
