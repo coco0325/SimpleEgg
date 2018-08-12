@@ -23,6 +23,7 @@ permissions:
             SimpleEgg.owner-override: true
             SimpleEgg.steal: true
             SimpleEgg.auto-tame: true
+            SimpleEgg.use-spawner: true
             SimpleEgg.update-notify: true
 
     #Admin
@@ -189,3 +190,7 @@ permissions:
             SimpleEgg.owner-override: true
     SimpleEgg.auto-tame:
         description: Allows a player to automatically tame an untamed mob when they capture it.
+    
+    #Other
+    SimpleEgg.use-spawner:
+        description: Allows a player to use a SimpleEgg on a mob spawner.

@@ -136,10 +136,19 @@ public class ListenerEggEvents extends AbstractListener {
             return;
 
         if (event.getItem() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            // Don't cancel the event and process SimpleEgg behaviors, if the
-            // player is trying to insert this egg into a spawner.
-            if (event.getClickedBlock().getType() == Material.SPAWNER)
-                return;
+            // Because SimpleEggs are not obtained by vanilla means, we will 
+            // control their use in spawners here. Vanilla spawn eggs are fine,
+            // but any SimpleEgg generated egg requires permissions to be used
+            // on mob spawners.
+            if (event.getClickedBlock().getType() == Material.SPAWNER) {
+                if (isSimpleEgg(meta)) {
+                    if (!event.getPlayer().hasPermission("SimpleEgg.use-spawner")) {
+                        event.setCancelled(true);
+                    }
+                    
+                    return;
+                }
+            }
             
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
             
