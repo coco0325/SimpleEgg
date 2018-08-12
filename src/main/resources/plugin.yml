@@ -13,7 +13,7 @@ commands:
         aliases: se
 
 permissions:
-    #Global
+    # Global
     SimpleEgg.*:
         children:
             SimpleEgg.passive: true
@@ -26,171 +26,137 @@ permissions:
             SimpleEgg.use-spawner: true
             SimpleEgg.update-notify: true
 
-    #Admin
+    # Admin
     SimpleEgg.update-notify:
-      description: Allow players to be notified of updates upon login
     SimpleEgg.reload:
-      description: Allow players to reload the plugin
 
-    #Passive
+    # Passive
     SimpleEgg.passive:
         children:
-            SimpleEgg.cow: true
-            SimpleEgg.pig: true
-            SimpleEgg.chicken: true
-            SimpleEgg.sheep: true
-            SimpleEgg.mushroomcow: true
-            SimpleEgg.rabbit: true
             SimpleEgg.bat: true
-            SimpleEgg.squid: true
-            SimpleEgg.polarbear: true
-            SimpleEgg.snowman: true
+            SimpleEgg.chicken: true
+            SimpleEgg.cod: true
+            SimpleEgg.cow: true
+            SimpleEgg.dolphin:
             SimpleEgg.irongolem: true
-    SimpleEgg.cow:
-        description: Allows capturing of this mob
-    SimpleEgg.pig:
-        description: Allows capturing of this mob
-    SimpleEgg.chicken:
-        description: Allows capturing of this mob
-    SimpleEgg.sheep:
-        description: Allows capturing of this mob
-    SimpleEgg.mushroomcow:
-        description: Allows capturing of this mob
-    SimpleEgg.rabbit:
-        description: Allows capturing of this mob
+            SimpleEgg.mushroomcow: true
+            SimpleEgg.pig: true
+            SimpleEgg.polarbear: true
+            SimpleEgg.pufferfish: true
+            SimpleEgg.rabbit: true
+            SimpleEgg.salmon: true
+            SimpleEgg.sheep: true
+            SimpleEgg.snowman: true
+            SimpleEgg.squid: true
+            SimpleEgg.tropicalfish: true
+            SimpleEgg.turtle: true
     SimpleEgg.bat:
-        description: Allows capturing of this mob
-    SimpleEgg.squid:
-        description: Allows capturing of this mob
-    SimpleEgg.polarbear:
-        description: Allows capturing of this mob
-    SimpleEgg.snowman:
-        description: Allows capturing of this mob
+    SimpleEgg.chicken:
+    SimpleEgg.cod:
+    SimpleEgg.cow:
+    SimpleEgg.dolphin:
     SimpleEgg.irongolem:
-        description: Allows capturing of this mob
+    SimpleEgg.mushroomcow:
+    SimpleEgg.pig:
+    SimpleEgg.polarbear:
+    SimpleEgg.pufferfish:
+    SimpleEgg.rabbit:
+    SimpleEgg.salmon:
+    SimpleEgg.sheep:
+    SimpleEgg.snowman:
+    SimpleEgg.squid:
+    SimpleEgg.tropicalfish:
+    SimpleEgg.turtle:
 
-    #Villager
+    # Villager
     SimpleEgg.villager:
-        description: Allows capturing of this mob
 
-    #Tameable
+    # Tameable
     SimpleEgg.tameable:
         children:
-            SimpleEgg.horse: true
             SimpleEgg.donkey: true
-            SimpleEgg.mule: true
-            SimpleEgg.zombiehorse: true
-            SimpleEgg.skeletonhorse: true
+            SimpleEgg.horse: true
             SimpleEgg.llama: true
-            SimpleEgg.wolf: true
+            SimpleEgg.mule: true
             SimpleEgg.ocelot: true
             SimpleEgg.parrot: true
-    SimpleEgg.horse:
-        description: Allows capturing of this mob
+            SimpleEgg.skeletonhorse: true
+            SimpleEgg.wolf: true
+            SimpleEgg.zombiehorse: true
     SimpleEgg.donkey:
-        description: Allows capturing of this mob
-    SimpleEgg.mule:
-        description: Allows capturing of this mob
-    SimpleEgg.zombiehorse:
-        description: Allows capturing of this mob
-    SimpleEgg.skeletonhorse:
-        description: Allows capturing of this mob
+    SimpleEgg.horse:
     SimpleEgg.llama:
-        description: Allows capturing of this mob
-    SimpleEgg.wolf:
-        description: Allows capturing of this mob
+    SimpleEgg.mule:
     SimpleEgg.ocelot:
-        description: Allows capturing of this mob
     SimpleEgg.parrot:
-        description: Allows capturing of this mob
+    SimpleEgg.skeletonhorse:
+    SimpleEgg.wolf:
+    SimpleEgg.zombiehorse:
 
-    #Monsters
+    # Monsters
     SimpleEgg.monster:
         children:
-            SimpleEgg.magmacube: true
             SimpleEgg.blaze: true
-            SimpleEgg.ghast: true
-            SimpleEgg.pigzombie: true
-            SimpleEgg.spider: true
             SimpleEgg.cavespider: true
-            SimpleEgg.zombie: true
-            SimpleEgg.husk: true
-            SimpleEgg.zombievillager: true
-            SimpleEgg.skeleton: true
-            SimpleEgg.witherskeleton: true
             SimpleEgg.creeper: true
-            SimpleEgg.witch: true
+            SimpleEgg.drowned: true
+            SimpleEgg.elderguardian: true
             SimpleEgg.enderman: true
             SimpleEgg.endermite: true
-            SimpleEgg.guardian: true
-            SimpleEgg.elderguardian: true
-            SimpleEgg.silverfish: true
-            SimpleEgg.slime: true
-            SimpleEgg.wither: true
-            SimpleEgg.shulker: true
             SimpleEgg.evoker: true
+            SimpleEgg.ghast: true
+            SimpleEgg.guardian: true
+            SimpleEgg.husk: true
+            SimpleEgg.magmacube: true
+            SimpleEgg.phantom: true
+            SimpleEgg.pigzombie: true
+            SimpleEgg.shulker: true
+            SimpleEgg.silverfish: true
+            SimpleEgg.skeleton: true
+            SimpleEgg.slime: true
+            SimpleEgg.spider: true
+            SimpleEgg.stray: true
             SimpleEgg.vex: true
             SimpleEgg.vindicator: true
-
-    SimpleEgg.magmacube:
-        description: Allows capturing of this mob
+            SimpleEgg.witch: true
+            SimpleEgg.wither: true
+            SimpleEgg.witherskeleton: true
+            SimpleEgg.zombie: true
+            SimpleEgg.zombievillager: true
     SimpleEgg.blaze:
-        description: Allows capturing of this mob
-    SimpleEgg.ghast:
-        description: Allows capturing of this mob
-    SimpleEgg.pigzombie:
-        description: Allows capturing of this mob
-    SimpleEgg.spider:
-        description: Allows capturing of this mob
     SimpleEgg.cavespider:
-        description: Allows capturing of this mob
-    SimpleEgg.zombie:
-        description: Allows capturing of this mob
-    SimpleEgg.husk:
-        description: Allows capturing of this mob
-    SimpleEgg.zombievillager:
-        description: Allows capturing of this mob
-    SimpleEgg.skeleton:
-        description: Allows capturing of this mob
-    SimpleEgg.witherskeleton:
-        description: Allows capturing of this mob
     SimpleEgg.creeper:
-        description: Allows capturing of this mob
-    SimpleEgg.witch:
-        description: Allows capturing of this mob
-    SimpleEgg.enderman:
-        description: Allows capturing of this mob
-    SimpleEgg.endermite:
-        description: Allows capturing of this mob
-    SimpleEgg.guardian:
-        description: Allows capturing of this mob
+    SimpleEgg.drowned:
     SimpleEgg.elderguardian:
-        description: Allows capturing of this mob
-    SimpleEgg.silverfish:
-        description: Allows capturing of this mob
-    SimpleEgg.slime:
-        description: Allows capturing of this mob
-    SimpleEgg.wither:
-        description: Allows capturing of this mob
-    SimpleEgg.shulker:
-        description: Allows capturing of this mob
+    SimpleEgg.enderman:
+    SimpleEgg.endermite:
     SimpleEgg.evoker:
-        description: Allows capturing of this mob
+    SimpleEgg.ghast:
+    SimpleEgg.guardian:
+    SimpleEgg.husk:
+    SimpleEgg.magmacube:
+    SimpleEgg.phantom:
+    SimpleEgg.pigzombie:
+    SimpleEgg.shulker:
+    SimpleEgg.silverfish:
+    SimpleEgg.skeleton:
+    SimpleEgg.slime:
+    SimpleEgg.spider:
+    SimpleEgg.stray:
     SimpleEgg.vex:
-        description: Allows capturing of this mob
     SimpleEgg.vindicator:
-        description: Allows capturing of this mob
+    SimpleEgg.witch:
+    SimpleEgg.wither:
+    SimpleEgg.witherskeleton:
+    SimpleEgg.zombie:
+    SimpleEgg.zombievillager:
 
-    #Ownership Modifications
+    # Ownership Modifications
     SimpleEgg.owner-override:
-        description: Allows a player to capture a tameable mob even if someone else owns it.
     SimpleEgg.steal:
-        description: Allows a player to capture and take ownership of a mob someone else owns.
         children:
             SimpleEgg.owner-override: true
     SimpleEgg.auto-tame:
-        description: Allows a player to automatically tame an untamed mob when they capture it.
     
-    #Other
+    # Other
     SimpleEgg.use-spawner:
-        description: Allows a player to use a SimpleEgg on a mob spawner.
