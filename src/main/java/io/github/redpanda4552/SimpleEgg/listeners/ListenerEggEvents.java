@@ -136,6 +136,11 @@ public class ListenerEggEvents extends AbstractListener {
             return;
 
         if (event.getItem() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            // Don't cancel the event and process SimpleEgg behaviors, if the
+            // player is trying to insert this egg into a spawner.
+            if (event.getClickedBlock().getType() == Material.SPAWNER)
+                return;
+            
             ArrayList<String> lore = (ArrayList<String>) meta.getLore();
             
             // Use a more specific identifier line, instead of the health line
