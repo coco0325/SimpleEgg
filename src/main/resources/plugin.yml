@@ -28,7 +28,9 @@ permissions:
 
     # Admin
     SimpleEgg.update-notify:
+        description: 
     SimpleEgg.reload:
+        description:
 
     # Passive
     SimpleEgg.passive:
@@ -37,7 +39,7 @@ permissions:
             SimpleEgg.chicken: true
             SimpleEgg.cod: true
             SimpleEgg.cow: true
-            SimpleEgg.dolphin:
+            SimpleEgg.dolphin: true
             SimpleEgg.irongolem: true
             SimpleEgg.mushroomcow: true
             SimpleEgg.pig: true
@@ -51,28 +53,47 @@ permissions:
             SimpleEgg.tropicalfish: true
             SimpleEgg.turtle: true
     SimpleEgg.bat:
+        description:
     SimpleEgg.chicken:
+        description:
     SimpleEgg.cod:
+        description:
     SimpleEgg.cow:
+        description:
     SimpleEgg.dolphin:
+        description:
     SimpleEgg.irongolem:
+        description:
     SimpleEgg.mushroomcow:
+        description:
     SimpleEgg.pig:
+        description:
     SimpleEgg.polarbear:
+        description:
     SimpleEgg.pufferfish:
+        description:
     SimpleEgg.rabbit:
+        description:
     SimpleEgg.salmon:
+        description:
     SimpleEgg.sheep:
+        description:
     SimpleEgg.snowman:
+        description:
     SimpleEgg.squid:
+        description:
     SimpleEgg.tropicalfish:
+        description:
     SimpleEgg.turtle:
+        description:
 
     # Villager
     SimpleEgg.villager:
+        description:
 
     # Tameable
     SimpleEgg.tameable:
+        description:
         children:
             SimpleEgg.donkey: true
             SimpleEgg.horse: true
@@ -84,14 +105,23 @@ permissions:
             SimpleEgg.wolf: true
             SimpleEgg.zombiehorse: true
     SimpleEgg.donkey:
+        description:
     SimpleEgg.horse:
+        description:
     SimpleEgg.llama:
+        description:
     SimpleEgg.mule:
+        description:
     SimpleEgg.ocelot:
+        description:
     SimpleEgg.parrot:
+        description:
     SimpleEgg.skeletonhorse:
+        description:
     SimpleEgg.wolf:
+        description:
     SimpleEgg.zombiehorse:
+        description:
 
     # Monsters
     SimpleEgg.monster:
@@ -124,39 +154,69 @@ permissions:
             SimpleEgg.zombie: true
             SimpleEgg.zombievillager: true
     SimpleEgg.blaze:
+        description:
     SimpleEgg.cavespider:
+        description:
     SimpleEgg.creeper:
+        description:
     SimpleEgg.drowned:
+        description:
     SimpleEgg.elderguardian:
+        description:
     SimpleEgg.enderman:
+        description:
     SimpleEgg.endermite:
+        description:
     SimpleEgg.evoker:
+        description:
     SimpleEgg.ghast:
+        description:
     SimpleEgg.guardian:
+        description:
     SimpleEgg.husk:
+        description:
     SimpleEgg.magmacube:
+        description:
     SimpleEgg.phantom:
+        description:
     SimpleEgg.pigzombie:
+        description:
     SimpleEgg.shulker:
+        description:
     SimpleEgg.silverfish:
+        description:
     SimpleEgg.skeleton:
+        description:
     SimpleEgg.slime:
+        description:
     SimpleEgg.spider:
+        description:
     SimpleEgg.stray:
+        description:
     SimpleEgg.vex:
+        description:
     SimpleEgg.vindicator:
+        description:
     SimpleEgg.witch:
+        description:
     SimpleEgg.wither:
+        description:
     SimpleEgg.witherskeleton:
+        description:
     SimpleEgg.zombie:
+        description:
     SimpleEgg.zombievillager:
+        description:
 
     # Ownership Modifications
     SimpleEgg.owner-override:
+        description:
     SimpleEgg.steal:
         children:
             SimpleEgg.owner-override: true
     SimpleEgg.auto-tame:
+        description:
     
     # Other
     SimpleEgg.use-spawner:
+        description:
