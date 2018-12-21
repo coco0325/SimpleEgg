@@ -28,33 +28,56 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * In keeping with tradition, Spigot's attempts to retrofit only create more
+ * problems...
+ * 
+ * Damage is no longer stored on the itemstack, but the itemmeta. Fine, except
+ * that's a lie, itemmeta doesn't store this property. It's stored in
+ * Damageable. Which, per the Javadocs, is not implemented by itemmeta, OR any
+ * of it's subinterfaces.
+ * 
+ * Even better, there's literally no other interface or class that implements
+ * Damageable. Maybe it's implemented by the actual classes of CraftBukkit???
+ * 
+ * But, in natural trades I haven't even seen damaged items. So I guess for now
+ * we'll just roll with this. But if the need ever comes about, hopefully there
+ * is a more, permanent? Solution than this.
+ */
 public class ItemStackConverter {
     
     public static String toString(ItemStack itemStack) {
         String ret = new String(itemStack.getType().toString());
-        ret += "-" + itemStack.getAmount() + "-" + itemStack.getDurability();
+        int damage = 0;
+        ret += "-" + itemStack.getAmount() + "-";
         
         if (!itemStack.hasItemMeta())
-            return ret;
+            return ret + damage;
         
-        if (itemStack.getItemMeta().hasDisplayName())
-            ret += "-" + itemStack.getItemMeta().getDisplayName();
+        ItemMeta baseMeta = itemStack.getItemMeta();
+        
+        if (baseMeta instanceof Damageable)
+            damage = ((Damageable) baseMeta).getDamage();
+        
+        ret += damage;
+        
+        if (baseMeta.hasDisplayName())
+            ret += "-" + baseMeta.getDisplayName();
         
         ret += "-";
         
-        if (itemStack.getItemMeta() instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+        if (baseMeta instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta ESMeta = (EnchantmentStorageMeta) itemStack.getItemMeta();
             
-            for (Enchantment enchantment : meta.getStoredEnchants().keySet())
-                ret += enchantment.getKey().getKey() + "/" + meta.getStoredEnchants().get(enchantment) + "-";
+            for (Enchantment enchantment : ESMeta.getStoredEnchants().keySet())
+                ret += enchantment.getKey().getKey() + "/" + ESMeta.getStoredEnchants().get(enchantment) + "-";
         } else {
-            ItemMeta meta = itemStack.getItemMeta();
-            
-            for (Enchantment enchantment : meta.getEnchants().keySet())
-                ret += enchantment.getKey().getKey() + "/" + meta.getEnchantLevel(enchantment) + "-";
+            for (Enchantment enchantment : baseMeta.getEnchants().keySet())
+                ret += enchantment.getKey().getKey() + "/" + baseMeta.getEnchantLevel(enchantment) + "-";
         }
         
         return ret.substring(0, ret.lastIndexOf("-")); // Trim extra - off
@@ -67,27 +90,29 @@ public class ItemStackConverter {
         try {
             Material resultMaterial = Material.valueOf(itemStackParts[0]);
             int resultAmount = Integer.parseInt(itemStackParts[1]);
-            short durability = Short.parseShort(itemStackParts[2]);
-            ret = new ItemStack(resultMaterial, resultAmount, durability);
+            int durability = Integer.parseInt(itemStackParts[2]);
+            ret = new ItemStack(resultMaterial, resultAmount);
+            ItemMeta baseMeta = Bukkit.getItemFactory().getItemMeta(resultMaterial);
             
-            if (resultMaterial == Material.ENCHANTED_BOOK) {
-                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) Bukkit.getItemFactory().getItemMeta(resultMaterial);
+            if (baseMeta instanceof Damageable)
+                ((Damageable) baseMeta).setDamage(durability);
+            
+            if (baseMeta instanceof EnchantmentStorageMeta) {
+                EnchantmentStorageMeta ESMeta = (EnchantmentStorageMeta) baseMeta;
                 
                 for (int i = 3; i < itemStackParts.length; i++) {
                     String[] enchantParts = itemStackParts[i].split("/");
-                    meta.addStoredEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
+                    ESMeta.addStoredEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
                 }
                 
-                ret.setItemMeta(meta);
+                ret.setItemMeta(ESMeta);
             } else {
-                ItemMeta meta = Bukkit.getItemFactory().getItemMeta(resultMaterial);
-                
                 for (int i = 3; i < itemStackParts.length; i++) {
                     String[] enchantParts = itemStackParts[i].split("/");
-                    meta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
+                    baseMeta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantParts[0])), Integer.parseInt(enchantParts[1]), true);
                 }
                 
-                ret.setItemMeta(meta);
+                ret.setItemMeta(baseMeta);
             }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Provided string cannot be converted to an ItemStack!", e);
