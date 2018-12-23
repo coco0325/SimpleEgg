@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.redpanda4552.SimpleEgg.util.LorePacker;
+import io.github.redpanda4552.SimpleEgg.util.MaterialProvider;
 import io.github.redpanda4552.SimpleEgg.util.Text;
 
 public class CaptureManager {
@@ -80,13 +81,20 @@ public class CaptureManager {
         Player player = entry.getPlayer();
         LivingEntity livingEntity = entry.getEntity();
         expenseHandler.execute(player);
-        ItemStack stack = new ItemStack(Material.getMaterial(livingEntity.getType().toString() + "_SPAWN_EGG"));
+        Material mat = MaterialProvider.fromEntityType(livingEntity.getType());
+        
+        if (mat == null) {
+            player.sendMessage(String.format("%s%s Could not capture %s%s%s, no appropriate spawn egg exists.", Text.tag, Text.b, Text.a, livingEntity.getType().getEntityClass().getSimpleName(), Text.b));
+            return;
+        }
+            
+        
+        ItemStack stack = new ItemStack(mat);
         ItemMeta meta = stack.getItemMeta();
         String name = Text.a + livingEntity.getType().getEntityClass().getSimpleName();
         
-        if (livingEntity.getCustomName() != null) {
+        if (livingEntity.getCustomName() != null)
             name += ": " + livingEntity.getCustomName();
-        }
         
         meta.setDisplayName(name);
         meta.setLore(new LorePacker(livingEntity).getLore());
