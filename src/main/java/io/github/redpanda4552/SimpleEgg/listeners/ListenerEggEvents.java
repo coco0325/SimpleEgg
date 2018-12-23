@@ -30,6 +30,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Egg;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -194,8 +195,9 @@ public class ListenerEggEvents extends AbstractListener {
     public void eggUseOnEntity(PlayerInteractEntityEvent event) {
         ItemStack stack = event.getPlayer().getInventory().getItemInMainHand();
         ItemMeta meta = stack.getItemMeta();
+        EntityType eggType = MaterialProvider.toEntityType(stack.getType());
         
-        if (isSimpleEgg(meta)) {
+        if (isSimpleEgg(meta) && eggType == event.getRightClicked().getType()) {
             event.getPlayer().sendMessage(Text.tag + "You cannot use a SimpleEgg to make babies out of other adult mobs.");
             event.setCancelled(true);
         }
