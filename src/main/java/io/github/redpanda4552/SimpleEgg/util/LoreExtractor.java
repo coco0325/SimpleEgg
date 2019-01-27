@@ -420,8 +420,13 @@ public class LoreExtractor {
     private void colorable(Colorable colorable) {
         String color = attributeMap.get("Color");
         
-        if (color != null)
-            colorable.setColor(DyeColor.valueOf(color));
+        if (color != null) {
+            if (color.equals("Default")) {
+                colorable.setColor(null);
+            } else {
+                colorable.setColor(DyeColor.valueOf(color));
+            }
+        }
     }
     
     private void tropicalFish(TropicalFish tropicalFish) {
