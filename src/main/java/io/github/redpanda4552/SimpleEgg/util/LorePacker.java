@@ -437,7 +437,13 @@ public class LorePacker {
     
     private ArrayList<String> colorable(Colorable colorable) {
         ArrayList<String> ret = new ArrayList<String>();
-        ret.add("Color: " + colorable.getColor().toString());
+        
+        if (colorable.getColor() != null) {
+            ret.add("Color: " + colorable.getColor().toString());            
+        } else {
+            ret.add("Color: Default");
+        }
+        
         return ret;
     }
     
