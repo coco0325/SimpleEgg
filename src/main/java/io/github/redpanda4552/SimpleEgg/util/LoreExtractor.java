@@ -46,6 +46,7 @@ import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Llama.Color;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Parrot.Variant;
@@ -115,6 +116,8 @@ public class LoreExtractor {
             
             if (livingEntity instanceof Sheep) {
                 sheep((Sheep) livingEntity);
+            } else if (livingEntity instanceof MushroomCow) {
+                mushroomCow((MushroomCow) livingEntity);
             } else if (livingEntity instanceof Panda) {
                 panda((Panda) livingEntity);
             } else if (livingEntity instanceof Pig) {
@@ -233,6 +236,14 @@ public class LoreExtractor {
         
         if (sheared != null)
             sheep.setSheared(Boolean.parseBoolean(sheared));
+    }
+    
+    private void mushroomCow(MushroomCow mushroomCow) {
+        String variant = attributeMap.get("Variant");
+        
+        if (variant != null) {
+            mushroomCow.setVariant(MushroomCow.Variant.valueOf(variant));
+        }
     }
     
     private void panda(Panda panda) {

@@ -40,6 +40,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Phantom;
@@ -95,6 +96,8 @@ public class LorePacker {
             
             if (livingEntity instanceof Sheep) {
                 lore.addAll(sheep((Sheep) livingEntity));
+            } else if (livingEntity instanceof MushroomCow) {
+                lore.addAll(mushroomCow((MushroomCow) livingEntity));
             } else if (livingEntity instanceof Panda) {
                 lore.addAll(panda((Panda) livingEntity));
             } else if (livingEntity instanceof Pig) {
@@ -226,6 +229,12 @@ public class LorePacker {
     private ArrayList<String> sheep(Sheep sheep) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Sheared: " + sheep.isSheared());
+        return ret;
+    }
+    
+    private ArrayList<String> mushroomCow(MushroomCow mushroomCow) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Variant: " + mushroomCow.getVariant().toString());
         return ret;
     }
     
