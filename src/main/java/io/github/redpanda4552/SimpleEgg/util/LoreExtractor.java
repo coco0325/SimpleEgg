@@ -36,15 +36,17 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Cat;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Llama.Color;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.Phantom;
@@ -52,22 +54,23 @@ import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Raider;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spellcaster;
 import org.bukkit.entity.Spellcaster.Spell;
-import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.TropicalFish;
+import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.entity.Villager;
-import org.bukkit.entity.Villager.Career;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.material.Colorable;
 
@@ -112,38 +115,20 @@ public class LoreExtractor {
             
             if (livingEntity instanceof Sheep) {
                 sheep((Sheep) livingEntity);
+            } else if (livingEntity instanceof Panda) {
+                panda((Panda) livingEntity);
             } else if (livingEntity instanceof Pig) {
                 pig((Pig) livingEntity);
             } else if (livingEntity instanceof Rabbit) {
                 rabbit((Rabbit) livingEntity);
             } else if (livingEntity instanceof Villager) {
                 villager((Villager) livingEntity);
-            } else if (livingEntity instanceof Tameable) {
-                tameable((Tameable) livingEntity);
-                
-                if (livingEntity instanceof AbstractHorse) {
-                    abstractHorse((AbstractHorse) livingEntity);
-                    
-                    if (livingEntity instanceof Horse) {
-                        horse((Horse) livingEntity);
-                    } else if (livingEntity instanceof ChestedHorse) {
-                        chestedHorse((ChestedHorse) livingEntity);
-                        
-                        if (livingEntity instanceof Llama) {
-                            llama((Llama) livingEntity);
-                        }
-                    }
-                } else if (livingEntity instanceof Sittable) {
-                    sittable((Sittable) livingEntity);
-                    
-                    if (livingEntity instanceof Wolf) {
-                        wolf((Wolf) livingEntity);
-                    } else if (livingEntity instanceof Ocelot) {
-                        ocelot((Ocelot) livingEntity);
-                    } else if (livingEntity instanceof Parrot) {
-                        parrot((Parrot) livingEntity);
-                    }
-                }
+            }
+        } else if (livingEntity instanceof Raider) {
+            raider((Raider) livingEntity);
+            
+            if (livingEntity instanceof Spellcaster) {
+                spellCaster((Spellcaster) livingEntity);
             }
         } else if (livingEntity instanceof Slime) {
             slime((Slime) livingEntity);
@@ -157,8 +142,6 @@ public class LoreExtractor {
             } else if (livingEntity instanceof ZombieVillager) {
                 zombieVillager((ZombieVillager) livingEntity);
             }
-        } else if (livingEntity instanceof Spellcaster) {
-            spellCaster((Spellcaster) livingEntity);
         } else if (livingEntity instanceof IronGolem) {
             ironGolem((IronGolem) livingEntity);
         } else if (livingEntity instanceof Snowman) {
@@ -173,8 +156,44 @@ public class LoreExtractor {
             tropicalFish((TropicalFish) livingEntity);
         }
         
+        if (livingEntity instanceof Sittable) {
+            sittable((Sittable) livingEntity);
+            
+            if (livingEntity instanceof Wolf) {
+                wolf((Wolf) livingEntity);
+            } else if (livingEntity instanceof Cat) {
+                cat((Cat) livingEntity);
+            } else if (livingEntity instanceof Parrot) {
+                parrot((Parrot) livingEntity);
+            } else if (livingEntity instanceof Fox) {
+                fox((Fox) livingEntity);
+            }
+        }
+        
+        if (livingEntity instanceof Tameable) {
+            tameable((Tameable) livingEntity);
+            
+            if (livingEntity instanceof AbstractHorse) {
+                abstractHorse((AbstractHorse) livingEntity);
+                
+                if (livingEntity instanceof Horse) {
+                    horse((Horse) livingEntity);
+                } else if (livingEntity instanceof ChestedHorse) {
+                    chestedHorse((ChestedHorse) livingEntity);
+                    
+                    if (livingEntity instanceof Llama) {
+                        llama((Llama) livingEntity);
+                    }
+                }
+            }
+        }
+        
         if (livingEntity instanceof Colorable) {
             colorable((Colorable) livingEntity);
+        }
+        
+        if (livingEntity instanceof Merchant) {
+            merchant((Merchant) livingEntity);
         }
     }
     
@@ -216,6 +235,19 @@ public class LoreExtractor {
             sheep.setSheared(Boolean.parseBoolean(sheared));
     }
     
+    private void panda(Panda panda) {
+        String mainGene = attributeMap.get("Main Gene");
+        String hiddenGene = attributeMap.get("Hidden Gene");
+        
+        if (mainGene != null) {
+            panda.setMainGene(Panda.Gene.valueOf(mainGene));
+        }
+        
+        if (hiddenGene != null) {
+            panda.setHiddenGene(Panda.Gene.valueOf(hiddenGene));
+        }
+    }
+    
     private void pig(Pig pig) {
         pig.setSaddle(Boolean.parseBoolean(attributeMap.get("Saddle")));
     }
@@ -232,13 +264,9 @@ public class LoreExtractor {
         // interface's method and we just don't know this?
         villager.setCustomName(attributeMap.get("Custom Name"));
         villager.setProfession(Profession.valueOf(attributeMap.get("Profession")));
-        
-        String career = attributeMap.get("Career");
-        
-        if (career != null)
-            villager.setCareer(Career.valueOf(career));
-        
-        villager.setRiches(Integer.parseInt(attributeMap.get("Riches")));
+    }
+    
+    private void merchant(Merchant merchant) {
         ArrayList<MerchantRecipe> merchantRecipes = new ArrayList<MerchantRecipe>();
         
         for (int i = 1; i < attributeMap.size(); i++) {
@@ -249,7 +277,7 @@ public class LoreExtractor {
             }
         }
         
-        villager.setRecipes(merchantRecipes);
+        merchant.setRecipes(merchantRecipes);
     }
     
     private void tameable(Tameable tameable) {
@@ -325,13 +353,18 @@ public class LoreExtractor {
         }
     }
     
-    private void ocelot(Ocelot ocelot) {
-        ocelot.setCatType(Ocelot.Type.valueOf(attributeMap.get("Type")));
+    private void cat(Cat cat) {
+        cat.setCatType(Cat.Type.valueOf(attributeMap.get("Type")));
     }
     
     private void parrot(Parrot parrot) {
         parrot.setVariant(Variant.valueOf(attributeMap.get("Variant")));
-        
+    }
+    
+    private void fox(Fox fox) {
+        fox.setFoxType(Fox.Type.valueOf(attributeMap.get("Type")));
+        fox.setCrouching(Boolean.parseBoolean(attributeMap.get("Crouching")));
+        fox.setSleeping(Boolean.parseBoolean(attributeMap.get("Sleeping")));
     }
     
     private void slime(Slime slime) {
@@ -370,6 +403,10 @@ public class LoreExtractor {
     
     private void zombieVillager(ZombieVillager zombieVillager) {
         zombieVillager.setVillagerProfession(Profession.valueOf(attributeMap.get("Profession")));
+    }
+    
+    private void raider(Raider raider) {
+        raider.setPatrolLeader(Boolean.parseBoolean(attributeMap.get("Patrol Leader")));
     }
     
     private void spellCaster(Spellcaster spellCaster) {

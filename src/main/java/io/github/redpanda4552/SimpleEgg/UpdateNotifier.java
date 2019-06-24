@@ -40,9 +40,10 @@ import java.util.zip.ZipFile;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * Check dev.bukkit.org to find updates for a given plugin, and download the updates if needed.
@@ -570,7 +571,7 @@ public class UpdateNotifier {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 final String response = reader.readLine();
 
-                final JSONArray array = (JSONArray) JSONValue.parse(response);
+                final JsonArray array = (JsonArray) new JsonParser().parse(response);
 
                 if (array.size() == 0) {
                      this.plugin.getLogger().warning("The updater could not find any files for the project id " + this.id);
@@ -578,10 +579,10 @@ public class UpdateNotifier {
                      return false;
                 }
 
-                this.versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.TITLE_VALUE);
-                this.versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.LINK_VALUE);
-                this.versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.TYPE_VALUE);
-                this.versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(UpdateNotifier.VERSION_VALUE);
+                this.versionName = ((JsonObject) array.get(array.size() - 1)).get(UpdateNotifier.TITLE_VALUE).getAsString();
+                this.versionLink = ((JsonObject) array.get(array.size() - 1)).get(UpdateNotifier.LINK_VALUE).getAsString();
+                this.versionType = ((JsonObject) array.get(array.size() - 1)).get(UpdateNotifier.TYPE_VALUE).getAsString();
+                this.versionGameVersion = ((JsonObject) array.get(array.size() - 1)).get(UpdateNotifier.VERSION_VALUE).getAsString();
 
                 return true;
           } catch (final IOException e) {

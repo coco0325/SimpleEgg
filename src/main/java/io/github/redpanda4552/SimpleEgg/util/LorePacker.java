@@ -31,20 +31,23 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Cat;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Raider;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Slime;
@@ -56,6 +59,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieVillager;
+import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.material.Colorable;
 
@@ -91,38 +95,20 @@ public class LorePacker {
             
             if (livingEntity instanceof Sheep) {
                 lore.addAll(sheep((Sheep) livingEntity));
+            } else if (livingEntity instanceof Panda) {
+                lore.addAll(panda((Panda) livingEntity));
             } else if (livingEntity instanceof Pig) {
                 lore.addAll(pig((Pig) livingEntity));
             } else if (livingEntity instanceof Rabbit) {
                 lore.addAll(rabbit((Rabbit) livingEntity));
             } else if (livingEntity instanceof Villager) {
                 lore.addAll(villager((Villager) livingEntity));
-            } else if (livingEntity instanceof Tameable) {
-                lore.addAll(tameable((Tameable) livingEntity));
-                
-                if (livingEntity instanceof AbstractHorse) {
-                    lore.addAll(abstractHorse((AbstractHorse) livingEntity));
-                    
-                    if (livingEntity instanceof Horse) {
-                        lore.addAll(horse((Horse) livingEntity));
-                    } else if (livingEntity instanceof ChestedHorse) {
-                        lore.addAll(chestedHorse((ChestedHorse) livingEntity));
-                        
-                        if (livingEntity instanceof Llama) {
-                            lore.addAll(llama((Llama) livingEntity));
-                        }
-                    }
-                } else if (livingEntity instanceof Sittable) {
-                    lore.addAll(sittable((Sittable) livingEntity));
-                    
-                    if (livingEntity instanceof Wolf) {
-                        lore.addAll(wolf((Wolf) livingEntity));
-                    } else if (livingEntity instanceof Ocelot) {
-                        lore.addAll(ocelot((Ocelot) livingEntity));
-                    } else if (livingEntity instanceof Parrot) {
-                        lore.addAll(parrot((Parrot) livingEntity));
-                    }
-                }
+            } 
+        } else if (livingEntity instanceof Raider) {
+            lore.addAll(raider((Raider) livingEntity));
+            
+            if (livingEntity instanceof Spellcaster) {
+                lore.addAll(spellCaster((Spellcaster) livingEntity));
             }
         } else if (livingEntity instanceof Slime) {
             lore.addAll(slime((Slime) livingEntity));
@@ -136,8 +122,6 @@ public class LorePacker {
             } else if (livingEntity instanceof ZombieVillager) {
                 lore.addAll(zombieVillager((ZombieVillager) livingEntity));
             }
-        } else if (livingEntity instanceof Spellcaster) {
-            lore.addAll(spellCaster((Spellcaster) livingEntity));
         } else if (livingEntity instanceof IronGolem) {
             lore.addAll(ironGolem((IronGolem) livingEntity));
         } else if (livingEntity instanceof Snowman) {
@@ -152,8 +136,44 @@ public class LorePacker {
             lore.addAll(tropicalFish((TropicalFish) livingEntity));
         }
         
+        if (livingEntity instanceof Sittable) {
+            lore.addAll(sittable((Sittable) livingEntity));
+            
+            if (livingEntity instanceof Wolf) {
+                lore.addAll(wolf((Wolf) livingEntity));
+            } else if (livingEntity instanceof Cat) {
+                lore.addAll(cat((Cat) livingEntity));
+            } else if (livingEntity instanceof Parrot) {
+                lore.addAll(parrot((Parrot) livingEntity));
+            } else if (livingEntity instanceof Fox) {
+                lore.addAll(fox((Fox) livingEntity));
+            }
+        }
+        
+        if (livingEntity instanceof Tameable) {
+            lore.addAll(tameable((Tameable) livingEntity));
+            
+            if (livingEntity instanceof AbstractHorse) {
+                lore.addAll(abstractHorse((AbstractHorse) livingEntity));
+                
+                if (livingEntity instanceof Horse) {
+                    lore.addAll(horse((Horse) livingEntity));
+                } else if (livingEntity instanceof ChestedHorse) {
+                    lore.addAll(chestedHorse((ChestedHorse) livingEntity));
+                    
+                    if (livingEntity instanceof Llama) {
+                        lore.addAll(llama((Llama) livingEntity));
+                    }
+                }
+            }
+        }
+        
         if (livingEntity instanceof Colorable) {
             lore.addAll(colorable((Colorable) livingEntity));
+        }
+        
+        if (livingEntity instanceof Merchant) {
+            lore.addAll(merchant((Merchant) livingEntity));
         }
     }
     
@@ -209,6 +229,13 @@ public class LorePacker {
         return ret;
     }
     
+    private ArrayList<String> panda(Panda panda) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Main Gene: " + panda.getMainGene().toString());
+        ret.add("Hidden Gene: " + panda.getHiddenGene().toString());
+        return ret;
+    }
+    
     private ArrayList<String> pig(Pig pig) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Saddle: " + pig.hasSaddle());
@@ -224,11 +251,14 @@ public class LorePacker {
     private ArrayList<String> villager(Villager villager) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Profession: " + villager.getProfession().toString());
-        ret.add("Career: " + villager.getCareer().toString());
-        ret.add("Riches: " + villager.getRiches());
+        return ret;
+    }
+    
+    private ArrayList<String> merchant(Merchant merchant) {
+        ArrayList<String> ret = new ArrayList<String>();
         int i = 1;
         
-        for (MerchantRecipe merchantRecipe : villager.getRecipes()) {
+        for (MerchantRecipe merchantRecipe : merchant.getRecipes()) {
             ret.add("Recipe" + i + ": " + MerchantRecipeConverter.toString(merchantRecipe));
             i++;
         }
@@ -327,15 +357,23 @@ public class LorePacker {
         return ret;
     }
     
-    private ArrayList<String> ocelot(Ocelot ocelot) {
+    private ArrayList<String> cat(Cat cat) {
         ArrayList<String> ret = new ArrayList<String>();
-        ret.add("Type: " + ocelot.getCatType());
+        ret.add("Type: " + cat.getCatType());
         return ret;
     }
     
     private ArrayList<String> parrot(Parrot parrot) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Variant: " + parrot.getVariant().toString());
+        return ret;
+    }
+    
+    private ArrayList<String> fox(Fox fox) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Type: " + fox.getFoxType().toString());
+        ret.add("Crouching: " + fox.isCrouching());
+        ret.add("Sleeping: " + fox.isSleeping());
         return ret;
     }
     
@@ -381,6 +419,12 @@ public class LorePacker {
     private ArrayList<String> zombieVillager(ZombieVillager zombieVillager) {
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("Profession: " + zombieVillager.getVillagerProfession().toString());
+        return ret;
+    }
+    
+    private ArrayList<String> raider(Raider raider) {
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add("Patrol Leader: " + raider.isPatrolLeader());
         return ret;
     }
     
